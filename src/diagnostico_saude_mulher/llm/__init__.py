@@ -1,0 +1,2 @@
+"""Integração desacoplada com LLMs."""
+

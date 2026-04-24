@@ -1,50 +1,51 @@
-# Otimizacao de Rotas para Atendimento Especializado a Mulher
+# Tech Challenge Fase 2 - Projeto 1
 
-Este repositorio contem uma implementacao do Tech Challenge, evoluindo o codigo base de TSP para um problema de roteirizacao de veiculos com restricoes reais do contexto de saude da mulher.
+## Otimizacao de modelos de diagnostico para saude da mulher
 
-O legado do TSP original continua disponivel nos arquivos [genetic_algorithm.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/genetic_algorithm.py) e [tsp.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/tsp.py). A nova solucao do projeto esta isolada em [src/womens_health_routing](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/src/womens_health_routing).
+Este projeto implementa uma solucao completa em Python para otimizar hiperparametros de modelos de Machine Learning usando Algoritmos Geneticos, com foco em apoio diagnostico para saude da mulher. O caso de uso escolhido foi classificacao de lesoes mamarias com base no dataset publico **Breast Cancer Wisconsin Diagnostic**, disponivel no `scikit-learn`.
 
-## O que foi implementado
+O sistema compara um modelo base com modelos otimizados por algoritmo genetico, priorizando **recall/sensibilidade** para reduzir risco de falso negativo em casos malignos. Tambem inclui um modulo desacoplado de LLM para gerar explicacoes em linguagem natural com cuidado etico, sem dependencia obrigatoria de API paga.
 
-- Algoritmo genetico para VRP com frota multipla.
-- Priorizacao de emergencias obstetricas, violencia domestica, medicacao hormonal, pos-parto e apoio oncologico.
-- Restricoes de capacidade, numero maximo de paradas, distancia maxima por veiculo, janela de tempo, protocolo seguro e cadeia fria.
-- Visualizacao das rotas em mapa operacional com codificacao por tipo de atendimento.
-- Geracao automatica de manual operacional, roteiro detalhado e respostas exemplo em linguagem natural.
-- Integracao configuravel com LLM por endpoint HTTP compativel, com fallback local.
-- Benchmark comparativo entre algoritmo genetico e baseline guloso viavel.
-- Testes automatizados do nucleo do solver.
+## Objetivo do projeto
 
-## Estrutura
+- Treinar um modelo base de classificacao.
+- Otimizar hiperparametros com algoritmo genetico.
+- Comparar modelo base vs modelos otimizados.
+- Gerar explicacoes em linguagem natural para apoio ao profissional de saude.
+- Persistir respostas da LLM em JSONL para reuso futuro.
+- Documentar arquitetura, execucao, consideracoes eticas e testes.
 
-- [src/womens_health_routing/domain.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/src/womens_health_routing/domain.py): entidades do dominio e avaliacao da solucao.
-- [src/womens_health_routing/sample_data.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/src/womens_health_routing/sample_data.py): cenario de demonstracao com visitas, prioridades e frota.
-- [src/womens_health_routing/ga_solver.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/src/womens_health_routing/ga_solver.py): solver genetico de VRP.
-- [src/womens_health_routing/reporting.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/src/womens_health_routing/reporting.py): geracao de instrucoes e relatorios especializados.
-- [src/womens_health_routing/baselines.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/src/womens_health_routing/baselines.py): baseline heuristico para comparacao.
-- [src/womens_health_routing/benchmarking.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/src/womens_health_routing/benchmarking.py): benchmark entre baseline e GA.
-- [src/womens_health_routing/visualization.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/src/womens_health_routing/visualization.py): construcao do mapa operacional.
-- [streamlit_app.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/streamlit_app.py): interface para demonstracao.
-- [benchmark_routes.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/benchmark_routes.py): script de benchmark.
-- [tests/test_solver.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/tests/test_solver.py): testes automatizados.
-- [docs/TECHNICAL_DESIGN.md](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/docs/TECHNICAL_DESIGN.md): documentacao tecnica.
-- [docs/RELATORIO_TECNICO.md](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/docs/RELATORIO_TECNICO.md): relatorio tecnico.
+## Dataset escolhido
 
-## Arquitetura
+- Nome: `Breast Cancer Wisconsin Diagnostic`
+- Fonte: dataset publico embarcado no `scikit-learn`
+- Dominio: apoio ao diagnostico de cancer de mama
+- Alvo no projeto: `1 = maligno`, `0 = benigno`
 
-```mermaid
-flowchart LR
-    A[Dataset de visitas e frota] --> B[GeneticVRPSolver]
-    B --> C[Avaliacao com prioridades e restricoes]
-    C --> D[Rotas otimizadas]
-    D --> E[Mapa operacional]
-    D --> F[Manual e roteiro detalhado]
-    D --> G[Q&A em linguagem natural]
+Observacao: o dataset nao possui variaveis demograficas apropriadas para uma analise robusta de equidade. O projeto, no entanto, implementa a estrutura para incluir esse calculo quando um dataset adequado estiver disponivel.
+
+## Estrutura do projeto
+
+```text
+src/
+  diagnostico_saude_mulher/
+    config/
+    data/
+    evaluation/
+    genetic_algorithm/
+    llm/
+    models/
+    utils/
+tests/
+docs/
+notebooks/
+run_project.py
+README.md
+requirements.txt
+.env.example
 ```
 
-## Como executar
-
-Crie um ambiente virtual e instale as dependencias:
+## Como instalar
 
 ```bash
 python3 -m venv .venv
@@ -52,65 +53,129 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Executar o solver em modo terminal:
+## Como executar
+
+Execucao principal:
 
 ```bash
-python3 run_routes.py
+python3 run_project.py
 ```
 
-Executar a interface Streamlit:
+O comando executa:
+
+- carregamento do dataset;
+- treinamento do modelo base;
+- 3 experimentos com algoritmo genetico;
+- comparacao de metricas;
+- geracao de explicacao pela LLM configurada;
+- persistencia da resposta em `artifacts/llm_responses.jsonl`.
+
+## Como rodar testes
 
 ```bash
-streamlit run streamlit_app.py
+PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
 
-Executar benchmark:
+## Variaveis de ambiente
+
+Copie o modelo:
 
 ```bash
-python3 benchmark_routes.py
+cp .env.example .env
 ```
 
-Executar os testes:
+Principais variaveis:
 
-```bash
-python3 -m unittest discover -s tests -v
-```
+- `LLM_PROVIDER`: `mock` ou `http`
+- `LLM_MODEL`: nome do modelo
+- `LLM_API_KEY`: chave da API, nunca commitar
+- `LLM_ENDPOINT`: endpoint compativel com chat completions
+- `LLM_OUTPUT_PATH`: caminho do arquivo JSONL de saida
+- `LOG_LEVEL`: nivel de log
 
-## Regras de negocio contempladas
+## Como funciona o algoritmo genetico
 
-- Emergencias obstetricas recebem penalidade maior quando atrasadas.
-- Casos de violencia domestica exigem veiculos com protocolo seguro.
-- Medicacoes hormonais refrigeradas so podem ser transportadas por veiculos com suporte a cadeia fria.
-- Atendimentos pos-parto possuem janela segura de visita.
-- Cada veiculo respeita limite de distancia, capacidade de suprimentos e numero de paradas.
+O algoritmo genetico otimiza hiperparametros de um `RandomForestClassifier`:
+
+- representacao genetica: dicionario de hiperparametros;
+- populacao inicial: individuos aleatorios no espaco de busca;
+- fitness: combinacao ponderada de recall, especificidade e F1-score;
+- selecao: torneio ou roleta;
+- crossover: uniforme gene a gene;
+- mutacao: substituicao aleatoria de genes conforme taxa de mutacao;
+- elitismo: melhores individuos sao preservados;
+- evolucao: repetida por geracoes com historico salvo.
+
+### Fitness
+
+A funcao objetivo prioriza recall:
+
+- `55%` recall
+- `25%` especificidade
+- `20%` F1-score
+- penalizacao opcional por gap de equidade
+
+## Experimentos obrigatorios
+
+Foram implementados 3 experimentos com variacao de:
+
+- tamanho da populacao;
+- taxa de mutacao;
+- numero de geracoes;
+- estrategia de selecao.
+
+Configuracoes executadas:
+
+1. Populacao `6`, geracoes `3`, mutacao `0.10`, selecao `tournament`
+2. Populacao `8`, geracoes `4`, mutacao `0.15`, selecao `tournament`
+3. Populacao `10`, geracoes `5`, mutacao `0.20`, selecao `roulette`
 
 ## Integracao com LLM
 
-Modo local padrao:
+O modulo de LLM foi desacoplado por interface:
 
-- `ROUTE_LLM_PROVIDER=rule_based`
+- `MockLLMClient`: uso local e testes automatizados
+- `HTTPLLMClient`: integracao via endpoint HTTP compativel
 
-Modo HTTP compativel com chat completions:
+As explicacoes geradas incluem:
 
-```bash
-export ROUTE_LLM_PROVIDER=http
-export ROUTE_LLM_ENDPOINT=https://seu-endpoint/v1/chat/completions
-export ROUTE_LLM_MODEL=seu-modelo
-export ROUTE_LLM_API_KEY=seu-token
-```
+- classificacao prevista;
+- probabilidade estimada;
+- interpretacao cautelosa;
+- orientacoes para profissionais de saude;
+- linguagem sensivel a genero;
+- aviso de que o sistema nao substitui avaliacao medica.
 
-Se o endpoint nao estiver configurado ou falhar, o sistema usa fallback local deterministicamente.
+Todas as respostas sao persistidas em JSONL para futura base de fine-tuning ou auditoria.
 
-## Benchmark e analise
+## Resultados esperados
 
-O benchmark compara o GA com um baseline guloso viavel para documentar ganho tecnico e apoiar o relatorio tecnico do projeto.
+- modelo base com desempenho forte e reproducivel;
+- ao menos um experimento genetico com melhora de recall e/ou equilibrio entre recall e especificidade;
+- historico de evolucao por geracao;
+- explicacao textual salva em arquivo.
 
+Como o algoritmo tem componente estocastico, pequenas variacoes podem ocorrer.
 
-## Validacao realizada
+## Testes automatizados
 
-- `python3 -m unittest discover -s tests -v`
-- `python3 -m compileall src streamlit_app.py tests`
+Cobertura incluida para:
 
-## Licenca
+- funcao fitness;
+- operadores geneticos;
+- treinamento basico do modelo;
+- geracao de prompt;
+- cliente mock da LLM;
+- persistencia do JSONL.
 
-Este projeto continua licenciado sob a [MIT License](LICENSE).
+## Consideracoes eticas
+
+- O sistema e de apoio, nao de decisao autonoma.
+- Resultados nao substituem avaliacao medica.
+- Priorizar recall reduz falso negativo, mas pode elevar falso positivo.
+- O projeto evita expor credenciais no codigo.
+- A estrutura admite monitoramento futuro de viés e equidade com datasets adequados.
+
+## Documentacao tecnica
+
+Detalhes adicionais estao em [docs/architecture.md](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/docs/architecture.md).

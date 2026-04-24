@@ -1,0 +1,2 @@
+"""Implementação do algoritmo genético."""
+
