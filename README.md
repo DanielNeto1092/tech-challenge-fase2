@@ -27,6 +27,9 @@ Observacao: o dataset nao possui variaveis demograficas apropriadas para uma ana
 ## Estrutura do projeto
 
 ```text
+artifacts/
+  llm_responses.jsonl
+  modelos/
 src/
   diagnostico_saude_mulher/
     config/
@@ -39,6 +42,7 @@ src/
 tests/
 docs/
 notebooks/
+main.py
 run_project.py
 README.md
 requirements.txt
@@ -58,6 +62,12 @@ pip install -r requirements.txt
 Execucao principal:
 
 ```bash
+python3 main.py
+```
+
+ou
+
+```bash
 python3 run_project.py
 ```
 
@@ -69,6 +79,20 @@ O comando executa:
 - comparacao de metricas;
 - geracao de explicacao pela LLM configurada;
 - persistencia da resposta em `artifacts/llm_responses.jsonl`.
+
+## Como treinar e exportar o modelo final
+
+Para gerar um artefato reutilizavel do modelo:
+
+```bash
+PYTHONPATH=src python3 -m diagnostico_saude_mulher.models.train_model
+```
+
+Arquivos gerados em `artifacts/modelos/`:
+
+- `modelo_cancer_mama.joblib`
+- `metricas_modelo_final.json`
+- `colunas_entrada.json`
 
 ## Como rodar testes
 
@@ -164,6 +188,8 @@ Cobertura incluida para:
 - funcao fitness;
 - operadores geneticos;
 - treinamento basico do modelo;
+- integracao do pipeline principal;
+- exportacao de artefatos do modelo final;
 - geracao de prompt;
 - cliente mock da LLM;
 - persistencia do JSONL.

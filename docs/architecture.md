@@ -28,6 +28,7 @@ Dataset -> Preparacao -> Modelo Base -> Avaliacao
 - Define schemas de resultados e metricas.
 - Treina modelo base e modelo otimizado.
 - Executa validacao cruzada e avaliacao final.
+- Exporta o modelo final e artefatos auxiliares para `artifacts/modelos/`.
 
 ### `evaluation`
 
@@ -63,6 +64,7 @@ Dataset -> Preparacao -> Modelo Base -> Avaliacao
 6. Inferencia em uma amostra de teste.
 7. Geracao de explicacao em linguagem natural.
 8. Persistencia da resposta em arquivo JSONL.
+9. Exportacao opcional do modelo final treinado.
 
 ## Decisoes tecnicas
 
