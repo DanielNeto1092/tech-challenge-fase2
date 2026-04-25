@@ -66,23 +66,33 @@ Dataset -> Preparacao -> Modelo Base -> Avaliacao
 ## Fluxo de execucao
 
 1. Carregamento do dataset de cancer de mama.
-2. Treinamento do modelo base `RandomForestClassifier`.
-3. Execucao de tres experimentos com configuracoes distintas do AG.
-4. Reavaliacao dos melhores hiperparametros no conjunto de teste.
-5. Escolha do melhor experimento com foco em recall no teste.
-6. Inferencia em uma amostra de teste.
-7. Geracao de explicacao em linguagem natural.
-8. Persistencia da resposta em arquivo JSONL.
-9. Exportacao opcional do modelo final treinado.
-10. Geracao opcional de graficos para acompanhamento dos experimentos.
+2. Treinamento e avaliacao dos modelos baseline suportados pelo projeto.
+3. Escolha automatica do modelo de referencia do AG com base na funcao de fitness.
+4. Execucao de tres experimentos com configuracoes distintas do AG sobre a familia selecionada.
+5. Reavaliacao dos melhores hiperparametros no conjunto de teste.
+6. Escolha do melhor experimento com foco em recall, F1-score e especificidade.
+7. Inferencia em uma amostra de teste.
+8. Geracao de explicacao em linguagem natural.
+9. Persistencia da resposta em arquivo JSONL.
+10. Exportacao opcional do modelo final treinado.
+11. Geracao opcional de graficos para acompanhamento dos experimentos.
 
 ## Decisoes tecnicas
 
 - Dataset embarcado no `scikit-learn` para garantir execucao local.
-- `RandomForestClassifier` por robustez, interpretabilidade operacional e hiperparametros adequados ao AG.
-- Validacao cruzada estratificada para reduzir risco de superajuste na fitness.
+- Comparacao entre multiplos modelos baseline para evitar fixar a etapa genetica em uma unica familia sem evidencia empirica.
+- O modelo de referencia do AG nao e definido manualmente; ele e escolhido automaticamente pelo melhor valor de fitness entre os baselines.
+- A familia otimizada pelo AG depende do melhor candidato encontrado na etapa baseline, o que torna a busca mais coerente com o desempenho observado.
+- Validacao estratificada na avaliacao do pipeline para reduzir risco de distorcoes entre treino e teste.
 - Fitness orientada a recall por conta do custo clinico de falso negativo.
 - Cliente `mock` para eliminar dependencia obrigatoria de API externa.
+
+## Interface, API e operacao
+
+- A interface Streamlit permite carregar o dataset padrao ou enviar CSV, executar baseline, disparar a otimizacao genetica, comparar metricas e consultar o historico da LLM.
+- A API separada em FastAPI prepara a base para desacoplamento entre interface, inferencia e execucao de cargas mais pesadas.
+- O projeto persiste artefatos em `artifacts/`, incluindo logs, respostas da LLM, graficos e modelos exportados.
+- A arquitetura atual permite migrar a etapa genetica para jobs assíncronos ou workers dedicados sem alterar a camada de apresentacao.
 
 ## Privacidade, vies e equidade
 
@@ -102,6 +112,7 @@ Dataset -> Preparacao -> Modelo Base -> Avaliacao
 ## Evolucoes futuras
 
 - Suporte a datasets com atributos demograficos apropriados.
-- Comparacao com outros algoritmos como XGBoost e Logistic Regression.
+- Ampliacao da comparacao com outras familias de modelos, como XGBoost e SVM.
 - Dashboards para historico de geracoes e importancia de atributos.
 - Registro versionado de prompts e respostas para auditoria.
+- Execucao da otimizacao genetica em background com fila e worker dedicado.

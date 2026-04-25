@@ -1,455 +1,225 @@
-# Algoritmo Genetico no Diagnostico de Cancer de Mama em Mulheres
+# Algoritmos Geneticos no Diagnostico de Cancer de Mama em Mulheres
 
-## Tech Challenge Fase 2 - Projeto 1
+## 1. Resumo
 
-## Resumo
+Este relatorio apresenta a execucao do estudo de otimizacao de hiperparametros com Algoritmos Geneticos aplicada ao dataset **Breast Cancer Wisconsin Diagnostic**. O objetivo foi comparar modelos baseline e modelos otimizados, com prioridade para **recall**, por se tratar de um problema de apoio ao diagnostico medico, em que falsos negativos sao mais criticos.
 
-Este documento apresenta o desenvolvimento de uma solucao computacional de apoio ao diagnostico de cancer de mama em mulheres, com foco na otimizacao de hiperparametros de modelos de Machine Learning por meio de Algoritmos Geneticos. O projeto foi construido em Python, com arquitetura modular, testes automatizados, geracao de relatorios, visualizacoes graficas e uma camada desacoplada de LLM para explicacoes em linguagem natural.
+O estudo avaliou quatro familias de modelos:
 
-O problema foi tratado como classificacao binaria, com prioridade para recall, uma vez que em cenarios clinicos de rastreio e apoio diagnostico o custo de falso negativo tende a ser mais alto do que o de falso positivo. Para isso, utilizou-se o dataset publico Breast Cancer Wisconsin Diagnostic, embarcado no `scikit-learn`. Na etapa de comparacao inicial, foram avaliados quatro modelos baseline. A etapa de otimizacao genetica passou a ser aplicada automaticamente sobre a familia de modelo mais performatica segundo a mesma funcao de fitness usada na busca evolutiva.
+- `KNeighborsClassifier`
+- `DecisionTreeClassifier`
+- `LogisticRegression`
+- `RandomForestClassifier`
 
-Tres experimentos com algoritmo genetico foram executados, variando populacao, taxa de mutacao, numero de geracoes e estrategia de selecao. A solucao final tambem incorporou interface web em Streamlit, API separada com FastAPI, geracao automatica de graficos, exportacao de artefatos, logging em arquivo e estrutura inicial para implantacao em nuvem.
+Para cada familia, foram executados tres experimentos de Algoritmo Genetico, com selecao por torneio, crossover, mutacao, elitismo e registro por geracao.
 
-## 1. Introducao
+## 2. Objetivo
 
-O uso de inteligencia artificial em saude exige equilibrio entre desempenho, interpretabilidade, responsabilidade etica e praticidade de uso. Em aplicacoes diagnosticas voltadas a saude da mulher, o sistema deve apoiar, e nao substituir, a avaliacao clinica. Dentro desse contexto, a otimizacao de hiperparametros por algoritmo genetico se mostra adequada porque permite explorar configuracoes de modelos de forma automatizada, mantendo foco em metricas clinicamente relevantes.
+O estudo foi estruturado para responder quatro perguntas:
 
-Neste projeto, o dominio escolhido foi o apoio ao diagnostico de cancer de mama. A proposta foi construir um pipeline capaz de:
+- qual o desempenho baseline de cada modelo no conjunto de teste;
+- se o Algoritmo Genetico melhora o recall de cada familia;
+- quais sao os trade-offs entre recall, especificidade e F1-score;
+- qual modelo apresenta o melhor equilibrio para recomendacao de uso clinico.
 
-- treinar e comparar multiplos modelos baseline;
-- otimizar hiperparametros com algoritmo genetico;
-- comparar resultados entre baseline e modelos otimizados;
-- gerar explicacoes textuais para profissionais de saude;
-- disponibilizar resultados em modo CLI, relatorio e interface web.
+## 3. Dataset e Preparacao
 
-## 2. Objetivos
+O dataset utilizado foi o **Breast Cancer Wisconsin Diagnostic**, disponibilizado no `scikit-learn`.
 
-### 2.1 Objetivo geral
+- total de amostras: `569`
+- treino: `455`
+- teste: `114`
+- classe positiva: `maligno`
 
-Desenvolver uma aplicacao em Python para apoio ao diagnostico de cancer de mama em mulheres, utilizando Machine Learning e Algoritmo Genetico para otimizacao de hiperparametros, com camada de explicabilidade textual via LLM.
+Etapas de preparacao:
 
-### 2.2 Objetivos especificos
+- normalizacao com `StandardScaler`;
+- split estratificado `80/20`;
+- avaliacao final no conjunto de teste;
+- conjunto de validacao interno para a funcao de fitness do AG.
 
-- utilizar um dataset publico e reproduzivel;
-- construir um modelo base sem otimizacao;
-- implementar algoritmo genetico completo para busca de hiperparametros;
-- executar ao menos tres experimentos distintos;
-- priorizar recall na funcao fitness;
-- disponibilizar explicacoes clinicas em linguagem natural;
-- registrar saidas em JSON/JSONL;
-- manter arquitetura organizada, testavel e documentada.
+## 4. Modelos Baseline
 
-## 3. Dataset Utilizado
-
-O dataset empregado foi o **Breast Cancer Wisconsin Diagnostic**, disponibilizado no pacote `scikit-learn`.
-
-### Caracteristicas relevantes
-
-- total de amostras: `569`;
-- problema de classificacao binaria;
-- contexto: apoio ao diagnostico de lesoes mamarias;
-- alvo ajustado no projeto: `1 = maligno`, `0 = benigno`.
-
-No projeto, o alvo original foi invertido para que a classe positiva representasse malignidade, o que torna o recall diretamente alinhado ao objetivo clinico de reduzir falsos negativos.
-
-## 4. Arquitetura da Solucao
-
-A aplicacao foi organizada em modulos coesos, com separacao clara entre configuracao, dados, avaliacao, algoritmo genetico, LLM, visualizacao, experimentacao, API e camada de apresentacao.
-
-### Estrutura principal
-
-```text
-src/diagnostico_saude_mulher/
-  config/
-  data/
-  evaluation/
-  experiments/
-  api/
-  genetic_algorithm/
-  llm/
-  models/
-  ui/
-  utils/
-  visualization/
-```
-
-### Pontos de entrada
-
-- [main.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/main.py): execucao principal do pipeline;
-- [run_genetic_optimization.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/run_genetic_optimization.py): experimentacao genetica com geracao de graficos;
-- [app.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/app.py): interface web com Streamlit;
-- [api.py](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/api.py): API HTTP para integracao futura e preparacao para a Fase 3.
-
-## 5. Metodologia de Machine Learning
-
-Na etapa de baseline, foram avaliados quatro algoritmos: `RandomForestClassifier`, `LogisticRegression`, `DecisionTreeClassifier` e `KNeighborsClassifier`. O modelo de referencia para a etapa genetica nao e fixado manualmente. Ele e selecionado automaticamente pelo melhor valor de fitness em validacao cruzada, o que torna a etapa evolutiva coerente com o baseline mais promissor.
-
-### Avaliacao
-
-O pipeline calcula:
-
-- recall;
-- especificidade;
-- F1-score;
-- acuracia;
-- precisao;
-- ROC AUC;
-- gap de equidade, quando houver atributo apropriado.
-
-Foi utilizada validacao cruzada estratificada para reduzir o risco de superajuste durante a avaliacao da funcao de fitness.
-
-## 6. Algoritmo Genetico
-
-O modulo genetico foi implementado de forma completa, com os seguintes elementos:
-
-- representacao genetica dos hiperparametros;
-- populacao inicial aleatoria;
-- funcao fitness ponderada;
-- selecao por torneio e por roleta;
-- crossover uniforme gene a gene;
-- mutacao aleatoria por gene;
-- elitismo;
-- historico de melhores individuos por geracao.
-
-### Espaco de busca
-
-O espaco de busca depende da familia de modelo escolhida pelo fitness. Na execucao atual, como a `LogisticRegression` foi selecionada como referencia, os genes considerados pelo AG foram:
-
-- `classifier__C`
-- `classifier__solver`
-- `scaler__with_mean`
-- `scaler__with_std`
-
-### Funcao fitness
-
-A funcao de fitness prioriza recall, sem ignorar a necessidade de controle de falsos positivos e estabilidade preditiva:
-
-- `55%` recall
-- `25%` especificidade
-- `20%` F1-score
-- penalizacao opcional por gap de equidade
-
-Essa composicao foi escolhida por refletir o risco clinico maior associado a casos malignos nao identificados.
-
-## 7. Integracao com LLM
-
-O sistema possui uma camada desacoplada de LLM, permitindo trocar o provedor sem alterar o restante da aplicacao.
-
-### Modos suportados
-
-- `mock`: resposta deterministica para testes e uso local;
-- `http`: integracao com endpoint compativel com chat completions.
-
-### Caracteristicas da explicacao gerada
-
-- classificacao prevista;
-- probabilidade estimada;
-- interpretacao cautelosa;
-- orientacoes para profissional de saude;
-- linguagem sensivel a genero;
-- aviso explicito de que o sistema nao substitui avaliacao medica.
-
-As respostas sao registradas em `artifacts/llm_responses.jsonl`, o que tambem permite auditoria, historico na interface e reuso futuro.
-
-## 8. Experimentos Realizados
-
-Foram executados tres experimentos geneticos:
-
-1. Populacao `6`, geracoes `3`, mutacao `0.10`, selecao `tournament`
-2. Populacao `8`, geracoes `4`, mutacao `0.15`, selecao `tournament`
-3. Populacao `10`, geracoes `5`, mutacao `0.20`, selecao `roulette`
-
-## 9. Resultados Obtidos
-
-Os resultados abaixo foram extraidos da execucao real registrada em [artifacts/experimentos_geneticos.json](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/experimentos_geneticos.json).
-
-### 9.1 Comparacao entre modelos baseline
-
-Antes da etapa genetica, o projeto comparou quatro modelos supervisionados no mesmo split de treino e teste.
+Os modelos baseline foram treinados com configuracoes padrao e avaliados no conjunto de teste.
 
 | Modelo | Recall | Especificidade | F1-score | Acuracia |
-| --- | --- | --- | --- | --- |
-| RandomForestClassifier | 92,86% | 98,61% | 95,12% | 96,49% |
-| LogisticRegression | 95,24% | 98,61% | 96,39% | 97,37% |
-| DecisionTreeClassifier | 85,71% | 94,44% | 87,80% | 91,23% |
+|---|---:|---:|---:|---:|
 | KNeighborsClassifier | 90,48% | 98,61% | 93,83% | 95,61% |
+| DecisionTreeClassifier | 90,48% | 94,44% | 90,48% | 92,98% |
+| LogisticRegression | 95,24% | 98,61% | 96,39% | 97,37% |
+| RandomForestClassifier | 92,86% | 100,00% | 96,30% | 97,37% |
 
-Leituras principais:
+Leitura inicial:
 
-- `LogisticRegression` apresentou o melhor recall e o melhor F1 entre os baselines avaliados;
-- `LogisticRegression` tambem obteve o maior valor de fitness em validacao cruzada e, por isso, foi selecionada como referencia para o AG;
-- `DecisionTreeClassifier` apresentou o pior equilibrio geral;
-- `KNeighborsClassifier` teve boa especificidade, mas ficou abaixo de `LogisticRegression` e `RandomForest` em recall.
+- `LogisticRegression` teve o maior recall entre os baselines;
+- `RandomForestClassifier` teve especificidade perfeita no teste;
+- `KNeighborsClassifier` apresentou baseline forte, mas abaixo de `LogisticRegression` em recall;
+- `DecisionTreeClassifier` foi o baseline menos equilibrado.
 
-### 9.2 Baseline de referencia para o AG
+## 5. Algoritmo Genetico
 
-#### Validacao cruzada
+### 5.1 Funcao de fitness
 
-- recall: `96,47%`
-- especificidade: `97,89%`
-- F1-score: `96,47%`
-- ROC AUC: `99,49%`
+A funcao de fitness foi definida com prioridade explicita para recall:
 
-#### Teste
+`fitness = (0.6 * recall) + (0.3 * f1_score) + (0.1 * especificidade)`
 
-- recall: `95,24%`
-- especificidade: `98,61%`
-- F1-score: `96,39%`
-- acuracia: `97,37%`
-- precisao: `97,56%`
-- ROC AUC: `99,54%`
+Essa escolha busca manter foco clinico na reducao de falsos negativos, sem ignorar o equilibrio geral do classificador.
 
-Esse baseline de referencia corresponde a `LogisticRegression`, selecionada automaticamente como ponto de partida para a etapa de otimizacao genetica.
+### 5.2 Operadores utilizados
 
-### 9.3 Experimento genetico 1
+- inicializacao aleatoria da populacao;
+- selecao por torneio;
+- crossover uniforme;
+- mutacao aleatoria por gene;
+- elitismo;
+- registro do melhor fitness e do fitness medio por geracao.
 
-#### Melhores hiperparametros
+### 5.3 Configuracoes executadas
 
-- `classifier__C=0.1`
-- `classifier__solver=lbfgs`
-- `scaler__with_mean=True`
-- `scaler__with_std=True`
+Foram executados tres experimentos para **cada modelo**:
 
-#### Teste
+1. `Experimento 1 - Exploracao`
+- populacao: `20`
+- geracoes: `15`
+- crossover: `0.80`
+- mutacao: `0.30`
+- torneio: `3`
+- elitismo: `2`
 
-- recall: `97,62%`
-- especificidade: `100,00%`
-- F1-score: `98,80%`
-- acuracia: `99,12%`
+2. `Experimento 2 - Equilibrio`
+- populacao: `30`
+- geracoes: `20`
+- crossover: `0.85`
+- mutacao: `0.15`
+- torneio: `4`
+- elitismo: `3`
 
-### 9.4 Experimento genetico 2
+3. `Experimento 3 - Refinamento`
+- populacao: `40`
+- geracoes: `25`
+- crossover: `0.90`
+- mutacao: `0.05`
+- torneio: `5`
+- elitismo: `4`
 
-#### Melhores hiperparametros
+## 6. Resultados da Otimizacao
 
-- `classifier__C=0.1`
-- `classifier__solver=lbfgs`
-- `scaler__with_mean=True`
-- `scaler__with_std=True`
+Os resultados abaixo foram extraidos da execucao real registrada em [results.json](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/ga_study/results.json).
 
-#### Teste
+| Modelo | Recall Baseline | Recall Otimizado | Delta Recall | Especificidade Final | F1-score Final |
+|---|---:|---:|---:|---:|---:|
+| KNeighborsClassifier | 90,48% | 92,86% | 2,38 p.p. | 95,83% | 92,86% |
+| DecisionTreeClassifier | 90,48% | 88,10% | -2,38 p.p. | 98,61% | 92,50% |
+| LogisticRegression | 95,24% | 95,24% | 0,00 p.p. | 98,61% | 96,39% |
+| RandomForestClassifier | 92,86% | 88,10% | -4,76 p.p. | 98,61% | 92,50% |
 
-- recall: `97,62%`
-- especificidade: `100,00%`
-- F1-score: `98,80%`
-- acuracia: `99,12%`
+### 6.1 Melhor experimento por modelo
 
-### 9.5 Experimento genetico 3
+- `KNeighborsClassifier`: `experimento_1_exploracao`
+- `DecisionTreeClassifier`: `experimento_2_equilibrio`
+- `LogisticRegression`: `experimento_1_exploracao`
+- `RandomForestClassifier`: `experimento_1_exploracao`
 
-Apresentou o mesmo conjunto de hiperparametros vencedores dos experimentos anteriores, com diferenca apenas no numero de geracoes executadas.
+### 6.2 Hiperparametros otimizados encontrados
 
-### 9.6 Analise comparativa
+**KNeighborsClassifier**
 
-Os baselines ja apresentaram desempenho forte, com destaque para `LogisticRegression`. Como essa familia foi a mais performatica pela funcao de fitness, ela tambem se tornou a base do AG. Nesse contexto, o algoritmo genetico elevou o desempenho do modelo de referencia e encontrou combinacoes que:
+- `n_neighbors = 2`
+- `weights = distance`
+- `p = 1`
 
-- aumentaram o recall de teste;
-- elevaram a especificidade para `100,00%`;
-- elevaram F1-score e acuracia para o melhor nivel observado no projeto.
+**DecisionTreeClassifier**
 
-Isso indica que, no contexto deste dataset, o AG foi eficaz em melhorar o equilibrio da propria `LogisticRegression`, porque a familia vencedora no baseline tambem foi a familia otimizada.
+- `max_depth = 9`
+- `min_samples_split = 6`
+- `min_samples_leaf = 1`
+- `criterion = entropy`
 
-## 10. Hiperparametros Otimizados Encontrados
+**LogisticRegression**
 
-Os melhores conjuntos de hiperparametros encontrados pelo algoritmo genetico foram os seguintes:
+- `C = 7.5`
+- `max_iter = 600`
+- `solver = liblinear`
 
-### Experimento 1
+**RandomForestClassifier**
 
-- `classifier__C = 0.1`
-- `classifier__solver = lbfgs`
-- `scaler__with_mean = True`
-- `scaler__with_std = True`
+- `n_estimators = 400`
+- `max_depth = 30`
+- `min_samples_split = 42`
+- `min_samples_leaf = 3`
 
-### Experimento 2
+## 7. Analise Automatica dos Resultados
 
-- `classifier__C = 0.1`
-- `classifier__solver = lbfgs`
-- `scaler__with_mean = True`
-- `scaler__with_std = True`
+Leitura consolidada da execucao:
 
-### Experimento 3
+- o maior ganho de recall foi obtido por `KNeighborsClassifier`, com aumento de `2,38` pontos percentuais;
+- `DecisionTreeClassifier` e `RandomForestClassifier` melhoraram alguns aspectos de equilibrio, mas perderam recall;
+- `LogisticRegression` nao ganhou recall adicional, mas manteve o melhor equilibrio geral entre recall, especificidade e F1-score;
+- a recomendacao automatica para uso clinico permaneceu em `LogisticRegression`.
 
-- `classifier__C = 0.1`
-- `classifier__solver = lbfgs`
-- `scaler__with_mean = True`
-- `scaler__with_std = True`
+Em termos praticos:
 
-Em termos praticos, qualquer um dos tres experimentos apresentou o mesmo conjunto de hiperparametros vencedores para a `LogisticRegression`, com recall de `97,62%`, especificidade de `100,00%`, F1-score de `98,80%` e acuracia de `99,12%` no conjunto de teste.
+- `KNeighborsClassifier` foi o modelo com maior ganho de sensibilidade;
+- `LogisticRegression` foi o modelo mais estavel;
+- `RandomForestClassifier` nao sustentou no teste a vantagem observada na validacao do AG;
+- `DecisionTreeClassifier` trocou recall por especificidade.
 
-### 10.1 Impacto dos hiperparametros no fitness
+## 8. Interpretacao Tecnica
 
-Para tornar a analise mais objetiva, a tabela abaixo resume como cada melhor configuracao se comportou na fase de busca do algoritmo genetico.
+O estudo mostrou que otimizar por AG nem sempre significa melhorar o recall final em todas as familias. O comportamento foi diferente entre os modelos:
 
-| Experimento | C | Solver | with_mean | with_std | Fitness final | Recall CV | Especificidade CV | F1 CV |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AG 1 | 0,1 | lbfgs | True | True | 0,9712 | 0,9647 | 0,9860 | 0,9704 |
-| AG 2 | 0,1 | lbfgs | True | True | 0,9712 | 0,9647 | 0,9860 | 0,9704 |
-| AG 3 | 0,1 | lbfgs | True | True | 0,9712 | 0,9647 | 0,9860 | 0,9704 |
+- em `KNeighborsClassifier`, o AG encontrou uma configuracao simples e eficaz, com ganho real de recall;
+- em `LogisticRegression`, o baseline ja era muito forte e o AG apenas confirmou uma regiao otima, sem ganho de teste;
+- em `DecisionTreeClassifier` e `RandomForestClassifier`, a otimizacao favoreceu solucoes mais conservadoras, com queda de recall e ganho de especificidade.
 
-Leitura tecnica dos resultados:
+Isso reforca um ponto importante: em problemas clinicos, a escolha do melhor modelo nao pode depender apenas do fitness em validacao. O comportamento no conjunto de teste precisa ser analisado junto com os trade-offs.
 
-- os tres experimentos convergiram para a mesma configuracao vencedora da `LogisticRegression`;
-- o melhor valor de fitness encontrado foi `0,9712`, acima do baseline de referencia em validacao cruzada;
-- isso sugere que o espaco de busca da regressao logistica, neste dataset, tem uma regiao otima bastante dominante;
-- por esse motivo, os graficos atuais mostram convergencia rapida e baixa dispersao entre experimentos.
+## 9. Graficos e Evidencias Visuais
 
-## 11. Visualizacoes e Graficos
+Arquivos gerados nesta execucao:
 
-Os graficos abaixo foram gerados automaticamente pelo projeto e estao incorporados ao relatorio.
+- [Comparacao baseline vs otimizado](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/ga_study/plots/comparacao_baseline_vs_otimizado.png)
+- [Convergencia KNN - experimento 1](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/ga_study/plots/convergencia_KNeighborsClassifier_experimento_1_exploracao.png)
+- [Convergencia Decision Tree - experimento 2](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/ga_study/plots/convergencia_DecisionTreeClassifier_experimento_2_equilibrio.png)
+- [Convergencia Logistic Regression - experimento 1](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/ga_study/plots/convergencia_LogisticRegression_experimento_1_exploracao.png)
+- [Convergencia Random Forest - experimento 1](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/ga_study/plots/convergencia_RandomForestClassifier_experimento_1_exploracao.png)
 
-O projeto gera automaticamente:
+Esses graficos mostram:
 
-- [Comparacao de metricas](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/comparacao_experimentos.png)
-- [Resumo dos experimentos](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/resumo_experimentos.png)
-- [Comportamento do fitness com os hiperparametros](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/comportamento_hiperparametros.png)
-- [Convergencia do experimento 1](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/convergencia_ag_experimento_1.png)
-- [Convergencia do experimento 2](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/convergencia_ag_experimento_2.png)
-- [Convergencia do experimento 3](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/convergencia_ag_experimento_3.png)
-- [Metricas por geracao - experimento 1](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/metricas_por_geracao_ag_experimento_1.png)
-- [Metricas por geracao - experimento 2](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/metricas_por_geracao_ag_experimento_2.png)
-- [Metricas por geracao - experimento 3](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/metricas_por_geracao_ag_experimento_3.png)
+- melhor fitness por geracao;
+- fitness medio por geracao;
+- diversidade da populacao;
+- individuos unicos por geracao;
+- evolucao dos parametros do melhor individuo.
 
-Esses graficos apoiam a analise da estabilidade do AG e a comparacao entre baseline e modelos otimizados.
+## 10. Interface, API e Operacao
 
-### Analises adicionais
+O projeto tambem entrega componentes opcionais relevantes:
 
-Para aprofundar a interpretacao dos resultados, o projeto inclui analises adicionais sobre o comportamento do modelo:
+- interface em Streamlit para carregar dataset, executar baseline e AG, comparar metricas e consultar historico da LLM;
+- API separada em FastAPI;
+- logging em arquivo;
+- persistencia de artefatos em JSON, JSONL e imagens;
+- Docker e `docker-compose`;
+- estrutura inicial em Terraform;
+- documentacao de nuvem e escalabilidade.
 
-- variacao do fitness em funcao dos hiperparametros otimizados;
-- evolucao de recall, especificidade e F1-score ao longo das geracoes;
-- comparacao consolidada entre os melhores individuos de cada experimento.
-
-Essas visualizacoes ajudam a responder nao apenas qual configuracao venceu, mas tambem como o modelo se comportou quando os hiperparametros variaram entre os experimentos.
-
-## 12. Interface Web
-
-Foi desenvolvida uma interface web em Streamlit para tornar o projeto mais demonstravel e mais proximo de um uso pratico.
-
-### Funcionalidades
-
-- visualizacao do baseline e dos experimentos geneticos;
-- comparacao de metricas;
-- exibicao de graficos;
-- carregamento do dataset padrao ou envio de CSV pelo usuario;
-- simulacao de predicao em amostras do conjunto de teste;
-- geracao de explicacao textual com a LLM configurada;
-- exibicao do historico das respostas geradas pela LLM;
-- aba de monitoramento com leitura dos logs da aplicacao.
-
-## 13. API e Preparacao para a Fase 3
-
-O projeto passou a expor uma API separada baseada em FastAPI, com o objetivo de preparar a arquitetura para cenarios futuros de integracao assincrona, servicos desacoplados e execucao em background.
-
-### Endpoints principais
-
-- `GET /health`
-- `GET /dataset`
-- `POST /baseline`
-- `POST /optimize`
-- `POST /predict`
-- `GET /llm/history`
-- `GET /logs`
-
-Essa separacao entre interface, API e dominio torna o projeto mais aderente a uma evolucao natural para a Fase 3.
-
-## 14. Monitoramento e Logging
-
-Foi implementado logging em arquivo com persistencia em:
-
-- `artifacts/logs/aplicacao.log`
-
-Os logs registram:
-
-- inicio e fim do treinamento dos modelos;
-- metricas relevantes do conjunto de teste;
-- execucao do algoritmo genetico;
-- desempenho por geracao;
-- geracao e persistencia das respostas da LLM.
-
-Esse material pode ser usado tanto para depuracao quanto para monitoramento operacional futuro.
-
-## 15. Infraestrutura, Escalabilidade e Nuvem
-
-O projeto foi preparado para execucao via container, com:
-
-- [Dockerfile](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/Dockerfile)
-- [docker-compose.yml](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/docker-compose.yml)
-
-Tambem foi adicionada uma estrutura inicial de Infraestrutura como Codigo em Terraform:
-
-- [infra/terraform/main.tf](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/infra/terraform/main.tf)
-- [infra/terraform/variables.tf](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/infra/terraform/variables.tf)
-- [infra/terraform/outputs.tf](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/infra/terraform/outputs.tf)
-
-### Estrategias de escala
-
-- separar a interface da execucao da otimizacao genetica;
-- mover experimentos pesados para workers ou jobs assíncronos;
-- manter artefatos fora do container, em armazenamento externo;
-- expor a API como camada de integracao entre frontend e processamento.
-
-## 16. Testes Automatizados
-
-O projeto possui testes automatizados para:
-
-- funcao fitness;
-- operadores geneticos;
-- treinamento basico do modelo;
-- integracao do pipeline principal;
-- exportacao de artefatos;
-- geracao de graficos;
-- prompts e cliente mock da LLM;
-- helpers de UI;
-- estrutura da API.
-
-Na validacao mais recente, a suite executou **17 testes** entre nucleo, visualizacao, integracao, API e helpers de apresentacao.
-
-## 17. Consideracoes Eticas
-
-Em saude, desempenho numerico nao e suficiente. Por isso, o projeto incorpora cuidados eticos explicitos:
+## 11. Consideracoes Eticas
 
 - o sistema e de apoio, nao de decisao autonoma;
-- a explicacao textual reforca limites do modelo;
-- nao ha armazenamento de chaves de API no codigo;
-- o pipeline foi preparado para equidade, embora o dataset atual nao permita auditoria demografica robusta;
-- priorizar recall e uma escolha tecnica coerente com o risco de subdiagnostico.
-
-## 18. Limitacoes
-
+- o foco em recall reduz falso negativo, mas pode elevar falso positivo;
 - o dataset e academico e nao substitui validacao clinica real;
-- o projeto utiliza um conjunto de dados relativamente pequeno;
-- a melhoria do AG no conjunto de teste foi mais evidente em especificidade e F1 do que em recall;
-- a analise de equidade fica limitada pela ausencia de atributos demograficos adequados no dataset escolhido;
-- a API ainda esta em modo inicial, sem autenticacao e sem fila de execucao.
+- a camada de LLM inclui aviso explicito de que a resposta nao substitui avaliacao medica;
+- nao ha credenciais expostas no repositorio.
 
-## 19. Conclusao
+## 12. Conclusao
 
-O projeto atingiu os objetivos propostos ao construir uma solucao completa para apoio ao diagnostico de cancer de mama em mulheres, utilizando Machine Learning, Algoritmo Genetico e LLM.
+Com base nos resultados reais desta execucao:
 
-Do ponto de vista tecnico, a solucao entregou:
+- o AG trouxe ganho de recall apenas para `KNeighborsClassifier`;
+- `LogisticRegression` permaneceu como melhor opcao geral;
+- `DecisionTreeClassifier` e `RandomForestClassifier` nao sustentaram ganho de sensibilidade no teste;
+- para uso clinico com o criterio adotado neste estudo, a recomendacao final e `LogisticRegression`.
 
-- arquitetura limpa e modular;
-- baseline forte e reproduzivel;
-- algoritmo genetico funcional e auditavel;
-- comparacao entre experimentos;
-- geracao automatica de relatorios e graficos;
-- interface web de demonstracao;
-- camada de explicacao textual desacoplada;
-- API separada para integracao futura;
-- logs, Docker e IaC inicial.
-
-Mesmo quando o ganho em recall no conjunto de teste nao superou o baseline, o processo de experimentacao mostrou valor ao identificar configuracoes com melhor equilibrio geral entre recall, especificidade e F1-score. A arquitetura final tambem deixa a base preparada para a Fase 3, tanto do ponto de vista tecnico quanto operacional.
-
-## 20. Referencias
-
-- `scikit-learn`: Breast Cancer Wisconsin Diagnostic Dataset
-- documentacao oficial do `scikit-learn`
-- artefatos do proprio projeto em `artifacts/`
-- codigo-fonte e documentacao em [README.md](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/README.md) e [docs/architecture.md](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/docs/architecture.md)
-- arquitetura de nuvem em [docs/cloud_architecture.md](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/docs/cloud_architecture.md)
-
-## 21. Como converter este documento para PDF
-
-Caso voce queira um arquivo PDF final com esse conteudo, uma opcao simples no seu ambiente e:
-
-1. abrir este arquivo em um editor com suporte a Markdown;
-2. exportar para PDF;
-3. ou usar uma ferramenta como Pandoc no seu ambiente local.
+O estudo cumpriu o objetivo de comparar baseline vs otimizado, registrar os melhores hiperparametros, gerar graficos de convergencia e produzir uma analise automatica coerente com as metricas observadas.

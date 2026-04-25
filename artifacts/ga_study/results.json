@@ -1,0 +1,3841 @@
+{
+  "dataset": {
+    "name": "Breast Cancer Wisconsin Diagnostic",
+    "train_size": 455,
+    "test_size": 114
+  },
+  "summary_table": [
+    {
+      "modelo": "KNeighborsClassifier",
+      "recall_baseline": 0.9047619047619048,
+      "recall_otimizado": 0.9285714285714286,
+      "delta_recall": 0.023809523809523836,
+      "specificity_baseline": 0.9861111111111112,
+      "specificity_otimizado": 0.9583333333333334,
+      "f1_baseline": 0.9382716049382716,
+      "f1_otimizado": 0.9285714285714286,
+      "accuracy_baseline": 0.956140350877193,
+      "accuracy_otimizado": 0.9473684210526315,
+      "melhor_experimento": "experimento_1_exploracao"
+    },
+    {
+      "modelo": "DecisionTreeClassifier",
+      "recall_baseline": 0.9047619047619048,
+      "recall_otimizado": 0.8809523809523809,
+      "delta_recall": -0.023809523809523836,
+      "specificity_baseline": 0.9444444444444444,
+      "specificity_otimizado": 0.9861111111111112,
+      "f1_baseline": 0.9047619047619048,
+      "f1_otimizado": 0.925,
+      "accuracy_baseline": 0.9298245614035088,
+      "accuracy_otimizado": 0.9473684210526315,
+      "melhor_experimento": "experimento_2_equilibrio"
+    },
+    {
+      "modelo": "LogisticRegression",
+      "recall_baseline": 0.9523809523809523,
+      "recall_otimizado": 0.9523809523809523,
+      "delta_recall": 0.0,
+      "specificity_baseline": 0.9861111111111112,
+      "specificity_otimizado": 0.9861111111111112,
+      "f1_baseline": 0.963855421686747,
+      "f1_otimizado": 0.963855421686747,
+      "accuracy_baseline": 0.9736842105263158,
+      "accuracy_otimizado": 0.9736842105263158,
+      "melhor_experimento": "experimento_1_exploracao"
+    },
+    {
+      "modelo": "RandomForestClassifier",
+      "recall_baseline": 0.9285714285714286,
+      "recall_otimizado": 0.8809523809523809,
+      "delta_recall": -0.04761904761904767,
+      "specificity_baseline": 1.0,
+      "specificity_otimizado": 0.9861111111111112,
+      "f1_baseline": 0.9629629629629629,
+      "f1_otimizado": 0.925,
+      "accuracy_baseline": 0.9736842105263158,
+      "accuracy_otimizado": 0.9473684210526315,
+      "melhor_experimento": "experimento_1_exploracao"
+    }
+  ],
+  "comparison_plot": "artifacts/ga_study/plots/comparacao_baseline_vs_otimizado.png",
+  "analysis_text": "O maior ganho de recall foi obtido por KNeighborsClassifier, com delta de 0.0238. Os principais trade-offs observados foram: KNeighborsClassifier: delta recall 0.0238, delta especificidade -0.0278, F1 final 0.9286. DecisionTreeClassifier: delta recall -0.0238, delta especificidade 0.0417, F1 final 0.9250. LogisticRegression: delta recall 0.0000, delta especificidade 0.0000, F1 final 0.9639. RandomForestClassifier: delta recall -0.0476, delta especificidade -0.0139, F1 final 0.9250. Considerando a funcao de fitness e o desempenho final, o melhor equilibrio geral foi obtido por LogisticRegression. Para uso clinico, a recomendacao automatica e priorizar o modelo LogisticRegression, pois ele combinou o maior desempenho otimizado com recall elevado, boa especificidade e F1-score consistente.",
+  "models": [
+    {
+      "model_name": "KNeighborsClassifier",
+      "baseline_metrics": {
+        "recall": 0.9047619047619048,
+        "specificity": 0.9861111111111112,
+        "f1_score": 0.9382716049382716,
+        "accuracy": 0.956140350877193,
+        "precision": 0.9743589743589743
+      },
+      "baseline_fitness": 0.9229497354497354,
+      "best_experiment_name": "experimento_1_exploracao",
+      "optimized_metrics": {
+        "recall": 0.9285714285714286,
+        "specificity": 0.9583333333333334,
+        "f1_score": 0.9285714285714286,
+        "accuracy": 0.9473684210526315,
+        "precision": 0.9285714285714286
+      },
+      "optimized_fitness": 0.9681847958788672,
+      "optimized_params": {
+        "n_neighbors": 2,
+        "weights": "distance",
+        "p": 1
+      },
+      "experiments": [
+        {
+          "experiment_name": "experimento_1_exploracao",
+          "config": {
+            "name": "experimento_1_exploracao",
+            "population_size": 20,
+            "generations": 15,
+            "crossover_rate": 0.8,
+            "mutation_rate": 0.3,
+            "tournament_k": 3,
+            "elitism": 2
+          },
+          "best_genes": {
+            "n_neighbors": 2,
+            "weights": "distance",
+            "p": 1
+          },
+          "best_fitness": 0.9681847958788672,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.9577464788732394,
+            "f1_score": 0.9545454545454546,
+            "accuracy": 0.9649122807017544,
+            "precision": 0.9333333333333333
+          },
+          "test_metrics": {
+            "recall": 0.9285714285714286,
+            "specificity": 0.9583333333333334,
+            "f1_score": 0.9285714285714286,
+            "accuracy": 0.9473684210526315,
+            "precision": 0.9285714285714286
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9466618279857038,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.946976265312658,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9574863206542317,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.957660709349887,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9593395982408273,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9579980229840386,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9608793254345764,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9625036103679822,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.959568800792846,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9641334469282901,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9557906222344681,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9612529076494166,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.962201802142855,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9546198125627645,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.96041474691907,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_KNeighborsClassifier_experimento_1_exploracao.png"
+        },
+        {
+          "experiment_name": "experimento_2_equilibrio",
+          "config": {
+            "name": "experimento_2_equilibrio",
+            "population_size": 30,
+            "generations": 20,
+            "crossover_rate": 0.85,
+            "mutation_rate": 0.15,
+            "tournament_k": 4,
+            "elitism": 3
+          },
+          "best_genes": {
+            "n_neighbors": 1,
+            "weights": "uniform",
+            "p": 1
+          },
+          "best_fitness": 0.9681847958788672,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.9577464788732394,
+            "f1_score": 0.9545454545454546,
+            "accuracy": 0.9649122807017544,
+            "precision": 0.9333333333333333
+          },
+          "test_metrics": {
+            "recall": 0.9285714285714286,
+            "specificity": 0.9583333333333334,
+            "f1_score": 0.9285714285714286,
+            "accuracy": 0.9473684210526315,
+            "precision": 0.9285714285714286
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9420177050634451,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9521055498928085,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9596713501179542,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9657899145042187,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9641961333881924,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9634155936070566,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9621278304167666,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9644815908364421,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9626418647057188,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9615157945652941,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9646706552435919,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9595317435587,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9650936266879147,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9614778659138129,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9655887090208005,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 15,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9643973388716105,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 16,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9595114055220614,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 17,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.965504457055969,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 18,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9641961333881924,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 19,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9636046580142064,
+              "best_genes": {
+                "n_neighbors": 1,
+                "weights": "uniform",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_KNeighborsClassifier_experimento_2_equilibrio.png"
+        },
+        {
+          "experiment_name": "experimento_3_refinamento",
+          "config": {
+            "name": "experimento_3_refinamento",
+            "population_size": 40,
+            "generations": 25,
+            "crossover_rate": 0.9,
+            "mutation_rate": 0.05,
+            "tournament_k": 5,
+            "elitism": 4
+          },
+          "best_genes": {
+            "n_neighbors": 2,
+            "weights": "distance",
+            "p": 1
+          },
+          "best_fitness": 0.9681847958788672,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.9577464788732394,
+            "f1_score": 0.9545454545454546,
+            "accuracy": 0.9649122807017544,
+            "precision": 0.9333333333333333
+          },
+          "test_metrics": {
+            "recall": 0.9285714285714286,
+            "specificity": 0.9583333333333334,
+            "f1_score": 0.9285714285714286,
+            "accuracy": 0.9473684210526315,
+            "precision": 0.9285714285714286
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9423015343178746,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9521287966479584,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9624004748709275,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9666181482921831,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.967433066572337,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.966095932429955,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.966910850710109,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9672667421016584,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.966910850710109,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9679552824345651,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.966095932429955,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.967433066572337,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9676625800166392,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9657941242048278,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9672189734861496,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 15,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9651507435046149,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 16,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9667895809227097,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 17,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9659450283173913,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 18,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9637992904457688,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 19,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9666967576239216,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 20,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9659450283173913,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 21,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9659450283173913,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 22,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9653442031234247,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 23,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.9649005965929351,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            },
+            {
+              "generation": 24,
+              "best_fitness": 0.9681847958788672,
+              "avg_fitness": 0.967433066572337,
+              "best_genes": {
+                "n_neighbors": 2,
+                "weights": "distance",
+                "p": 1
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9545454545454546
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_KNeighborsClassifier_experimento_3_refinamento.png"
+        }
+      ]
+    },
+    {
+      "model_name": "DecisionTreeClassifier",
+      "baseline_metrics": {
+        "recall": 0.9047619047619048,
+        "specificity": 0.9444444444444444,
+        "f1_score": 0.9047619047619048,
+        "accuracy": 0.9298245614035088,
+        "precision": 0.9047619047619048
+      },
+      "baseline_fitness": 0.9087301587301587,
+      "best_experiment_name": "experimento_2_equilibrio",
+      "optimized_metrics": {
+        "recall": 0.8809523809523809,
+        "specificity": 0.9861111111111112,
+        "f1_score": 0.925,
+        "accuracy": 0.9473684210526315,
+        "precision": 0.9736842105263158
+      },
+      "optimized_fitness": 0.9501004001765903,
+      "optimized_params": {
+        "max_depth": 9,
+        "min_samples_split": 6,
+        "min_samples_leaf": 1,
+        "criterion": "entropy"
+      },
+      "experiments": [
+        {
+          "experiment_name": "experimento_1_exploracao",
+          "config": {
+            "name": "experimento_1_exploracao",
+            "population_size": 20,
+            "generations": 15,
+            "crossover_rate": 0.8,
+            "mutation_rate": 0.3,
+            "tournament_k": 3,
+            "elitism": 2
+          },
+          "best_genes": {
+            "max_depth": 26,
+            "min_samples_split": 7,
+            "min_samples_leaf": 1,
+            "criterion": "entropy"
+          },
+          "best_fitness": 0.9501004001765903,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.9014084507042254,
+            "f1_score": 0.9130434782608695,
+            "accuracy": 0.9298245614035088,
+            "precision": 0.8571428571428571
+          },
+          "test_metrics": {
+            "recall": 0.8333333333333334,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.8974358974358975,
+            "accuracy": 0.9298245614035088,
+            "precision": 0.9722222222222222
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9329839502129053,
+              "avg_fitness": 0.9183980276640943,
+              "best_genes": {
+                "max_depth": 6,
+                "min_samples_split": 5,
+                "min_samples_leaf": 6,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9302325581395349,
+              "best_specificity": 0.9577464788732394,
+              "best_f1_score": 0.9302325581395349
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9414552641167097,
+              "avg_fitness": 0.9162108765452721,
+              "best_genes": {
+                "max_depth": 18,
+                "min_samples_split": 7,
+                "min_samples_leaf": 4,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9295774647887324,
+              "best_f1_score": 0.9213483146067416
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9228491068548207,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9295625986287235,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9336456246932233,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9245969197655357,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9309712615181229,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9283284156342925,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9342601820847127,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9297962581260526,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9357588151194627,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9288632679855947,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9389845499057381,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9345854409112672,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9350486395181068,
+              "best_genes": {
+                "max_depth": 26,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_DecisionTreeClassifier_experimento_1_exploracao.png"
+        },
+        {
+          "experiment_name": "experimento_2_equilibrio",
+          "config": {
+            "name": "experimento_2_equilibrio",
+            "population_size": 30,
+            "generations": 20,
+            "crossover_rate": 0.85,
+            "mutation_rate": 0.15,
+            "tournament_k": 4,
+            "elitism": 3
+          },
+          "best_genes": {
+            "max_depth": 9,
+            "min_samples_split": 6,
+            "min_samples_leaf": 1,
+            "criterion": "entropy"
+          },
+          "best_fitness": 0.9501004001765903,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.9014084507042254,
+            "f1_score": 0.9130434782608695,
+            "accuracy": 0.9298245614035088,
+            "precision": 0.8571428571428571
+          },
+          "test_metrics": {
+            "recall": 0.8809523809523809,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.925,
+            "accuracy": 0.9473684210526315,
+            "precision": 0.9736842105263158
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9183352628477357,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9228617045451422,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9324775495363979,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9380282703842617,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.944441424206923,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9441532530049269,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9412263881954277,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.941097483517815,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9385248733135558,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9383611929594118,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9428132230313575,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9396189557127329,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9454308286335068,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9331603604231742,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9390000929729957,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 15,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9418011159257857,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 16,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9399377385457985,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 17,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9416916097084205,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 18,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9422451592373143,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 19,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9381677661003484,
+              "best_genes": {
+                "max_depth": 9,
+                "min_samples_split": 6,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_DecisionTreeClassifier_experimento_2_equilibrio.png"
+        },
+        {
+          "experiment_name": "experimento_3_refinamento",
+          "config": {
+            "name": "experimento_3_refinamento",
+            "population_size": 40,
+            "generations": 25,
+            "crossover_rate": 0.9,
+            "mutation_rate": 0.05,
+            "tournament_k": 5,
+            "elitism": 4
+          },
+          "best_genes": {
+            "max_depth": 14,
+            "min_samples_split": 7,
+            "min_samples_leaf": 1,
+            "criterion": "entropy"
+          },
+          "best_fitness": 0.9501004001765903,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.9014084507042254,
+            "f1_score": 0.9130434782608695,
+            "accuracy": 0.9298245614035088,
+            "precision": 0.8571428571428571
+          },
+          "test_metrics": {
+            "recall": 0.8333333333333334,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.8974358974358975,
+            "accuracy": 0.9298245614035088,
+            "precision": 0.9722222222222222
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9158699128897053,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9266495982380343,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9383264841319742,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9448567304869695,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.946736622161575,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9467194652470745,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9460771116090629,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9461645692189353,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9469435258689558,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9469489072873184,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9454932296987713,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9483464403223089,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9450856702490651,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9456298968427683,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9482466272654229,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 15,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9459286154974137,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 16,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.943514618611259,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 17,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9484527370640772,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 18,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9485903950727422,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 19,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9459280890180523,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 20,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9479013721587162,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 21,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9472471895530525,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 22,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.946697938577459,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 23,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9469382620540955,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            },
+            {
+              "generation": 24,
+              "best_fitness": 0.9501004001765903,
+              "avg_fitness": 0.9461474123044349,
+              "best_genes": {
+                "max_depth": 14,
+                "min_samples_split": 7,
+                "min_samples_leaf": 1,
+                "criterion": "entropy"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.9014084507042254,
+              "best_f1_score": 0.9130434782608695
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_DecisionTreeClassifier_experimento_3_refinamento.png"
+        }
+      ]
+    },
+    {
+      "model_name": "LogisticRegression",
+      "baseline_metrics": {
+        "recall": 0.9523809523809523,
+        "specificity": 0.9861111111111112,
+        "f1_score": 0.963855421686747,
+        "accuracy": 0.9736842105263158,
+        "precision": 0.975609756097561
+      },
+      "baseline_fitness": 0.9591963090457066,
+      "best_experiment_name": "experimento_1_exploracao",
+      "optimized_metrics": {
+        "recall": 0.9523809523809523,
+        "specificity": 0.9861111111111112,
+        "f1_score": 0.963855421686747,
+        "accuracy": 0.9736842105263158,
+        "precision": 0.975609756097561
+      },
+      "optimized_fitness": 0.9728847826332493,
+      "optimized_params": {
+        "C": 7.5,
+        "max_iter": 600,
+        "solver": "liblinear"
+      },
+      "experiments": [
+        {
+          "experiment_name": "experimento_1_exploracao",
+          "config": {
+            "name": "experimento_1_exploracao",
+            "population_size": 20,
+            "generations": 15,
+            "crossover_rate": 0.8,
+            "mutation_rate": 0.3,
+            "tournament_k": 3,
+            "elitism": 2
+          },
+          "best_genes": {
+            "C": 7.5,
+            "max_iter": 600,
+            "solver": "liblinear"
+          },
+          "best_fitness": 0.9728847826332493,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.971830985915493,
+            "f1_score": 0.9655172413793104,
+            "accuracy": 0.9736842105263158,
+            "precision": 0.9545454545454546
+          },
+          "test_metrics": {
+            "recall": 0.9523809523809523,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.963855421686747,
+            "accuracy": 0.9736842105263158,
+            "precision": 0.975609756097561
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9626411987467602,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9705693503442466,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.970718138510095,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.968799437047107,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9716053515710741,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.968799437047107,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9699291896828843,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9681547635609261,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9703214076840805,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9724880518072346,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9713628119962759,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9716053515710741,
+              "best_genes": {
+                "C": 7.5,
+                "max_iter": 600,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_LogisticRegression_experimento_1_exploracao.png"
+        },
+        {
+          "experiment_name": "experimento_2_equilibrio",
+          "config": {
+            "name": "experimento_2_equilibrio",
+            "population_size": 30,
+            "generations": 20,
+            "crossover_rate": 0.85,
+            "mutation_rate": 0.15,
+            "tournament_k": 4,
+            "elitism": 3
+          },
+          "best_genes": {
+            "C": 5.0,
+            "max_iter": 900,
+            "solver": "liblinear"
+          },
+          "best_fitness": 0.9728847826332493,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.971830985915493,
+            "f1_score": 0.9655172413793104,
+            "accuracy": 0.9736842105263158,
+            "precision": 0.9545454545454546
+          },
+          "test_metrics": {
+            "recall": 0.9523809523809523,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.963855421686747,
+            "accuracy": 0.9736842105263158,
+            "precision": 0.975609756097561
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9651035805569076,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9714403532178132,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.970591001233275,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.972355808198563,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9726202954159062,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9713411611072476,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.972355808198563,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332493,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9697314365850339,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9714403532178132,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332493,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9726202954159062,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.972355808198563,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.972355808198563,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9710171815004836,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 15,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9720318285917992,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 16,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9705873991763629,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 17,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332493,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 18,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332493,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 19,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332493,
+              "best_genes": {
+                "C": 5.0,
+                "max_iter": 900,
+                "solver": "liblinear"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_LogisticRegression_experimento_2_equilibrio.png"
+        },
+        {
+          "experiment_name": "experimento_3_refinamento",
+          "config": {
+            "name": "experimento_3_refinamento",
+            "population_size": 40,
+            "generations": 25,
+            "crossover_rate": 0.9,
+            "mutation_rate": 0.05,
+            "tournament_k": 5,
+            "elitism": 4
+          },
+          "best_genes": {
+            "C": 1.0,
+            "max_iter": 700,
+            "solver": "saga"
+          },
+          "best_fitness": 0.9728847826332493,
+          "validation_metrics": {
+            "recall": 0.9767441860465116,
+            "specificity": 0.971830985915493,
+            "f1_score": 0.9655172413793104,
+            "accuracy": 0.9736842105263158,
+            "precision": 0.9545454545454546
+          },
+          "test_metrics": {
+            "recall": 0.9285714285714286,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.9512195121951219,
+            "accuracy": 0.9649122807017544,
+            "precision": 0.975
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9624703517122022,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9726864172202421,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9718014605716722,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9718014605716722,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 15,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9719254319017553,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 16,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9726864172202421,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 17,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 18,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 19,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9728847826332492,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 20,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9713628119962759,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 21,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9724880518072346,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 22,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9726864172202421,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 23,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9726864172202421,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            },
+            {
+              "generation": 24,
+              "best_fitness": 0.9728847826332493,
+              "avg_fitness": 0.9718014605716722,
+              "best_genes": {
+                "C": 1.0,
+                "max_iter": 700,
+                "solver": "saga"
+              },
+              "best_recall": 0.9767441860465116,
+              "best_specificity": 0.971830985915493,
+              "best_f1_score": 0.9655172413793104
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_LogisticRegression_experimento_3_refinamento.png"
+        }
+      ]
+    },
+    {
+      "model_name": "RandomForestClassifier",
+      "baseline_metrics": {
+        "recall": 0.9285714285714286,
+        "specificity": 1.0,
+        "f1_score": 0.9629629629629629,
+        "accuracy": 0.9736842105263158,
+        "precision": 1.0
+      },
+      "baseline_fitness": 0.946031746031746,
+      "best_experiment_name": "experimento_1_exploracao",
+      "optimized_metrics": {
+        "recall": 0.8809523809523809,
+        "specificity": 0.9861111111111112,
+        "f1_score": 0.925,
+        "accuracy": 0.9473684210526315,
+        "precision": 0.9736842105263158
+      },
+      "optimized_fitness": 0.9600963372574709,
+      "optimized_params": {
+        "n_estimators": 400,
+        "max_depth": 30,
+        "min_samples_split": 42,
+        "min_samples_leaf": 3
+      },
+      "experiments": [
+        {
+          "experiment_name": "experimento_1_exploracao",
+          "config": {
+            "name": "experimento_1_exploracao",
+            "population_size": 20,
+            "generations": 15,
+            "crossover_rate": 0.8,
+            "mutation_rate": 0.3,
+            "tournament_k": 3,
+            "elitism": 2
+          },
+          "best_genes": {
+            "n_estimators": 400,
+            "max_depth": 30,
+            "min_samples_split": 42,
+            "min_samples_leaf": 3
+          },
+          "best_fitness": 0.9600963372574709,
+          "validation_metrics": {
+            "recall": 0.9534883720930233,
+            "specificity": 0.9859154929577465,
+            "f1_score": 0.9647058823529412,
+            "accuracy": 0.9736842105263158,
+            "precision": 0.9761904761904762
+          },
+          "test_metrics": {
+            "recall": 0.8809523809523809,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.925,
+            "accuracy": 0.9473684210526315,
+            "precision": 0.9736842105263158
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9520256891127413,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.956566143784733,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9587402866180526,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9573850985530143,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9598576520683608,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9575629059037464,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9592137888892864,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9576194843479481,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9592137888892864,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9585099104462141,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9567448137098452,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9576273620780297,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9592137888892864,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9545625572862619,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.956566143784733,
+              "best_genes": {
+                "n_estimators": 400,
+                "max_depth": 30,
+                "min_samples_split": 42,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_RandomForestClassifier_experimento_1_exploracao.png"
+        },
+        {
+          "experiment_name": "experimento_2_equilibrio",
+          "config": {
+            "name": "experimento_2_equilibrio",
+            "population_size": 30,
+            "generations": 20,
+            "crossover_rate": 0.85,
+            "mutation_rate": 0.15,
+            "tournament_k": 4,
+            "elitism": 3
+          },
+          "best_genes": {
+            "n_estimators": 350,
+            "max_depth": 45,
+            "min_samples_split": 34,
+            "min_samples_leaf": 3
+          },
+          "best_fitness": 0.9600963372574709,
+          "validation_metrics": {
+            "recall": 0.9534883720930233,
+            "specificity": 0.9859154929577465,
+            "f1_score": 0.9647058823529412,
+            "accuracy": 0.9736842105263158,
+            "precision": 0.9761904761904762
+          },
+          "test_metrics": {
+            "recall": 0.8809523809523809,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.925,
+            "accuracy": 0.9473684210526315,
+            "precision": 0.9736842105263158
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9517072965332602,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9595079716786812,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9587606129251569,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9593489785039465,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9600963372574708,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9593488482192746,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9589196060998916,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9583312405211019,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9595079716786812,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9568365230140532,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9583312405211019,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9586042254438624,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9600963372574708,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9572685011115484,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9600963372574708,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 15,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9595079716786812,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 16,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9589196060998916,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 17,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9583312405211019,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 18,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9595079716786812,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 19,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9568391287074934,
+              "best_genes": {
+                "n_estimators": 350,
+                "max_depth": 45,
+                "min_samples_split": 34,
+                "min_samples_leaf": 3
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_RandomForestClassifier_experimento_2_equilibrio.png"
+        },
+        {
+          "experiment_name": "experimento_3_refinamento",
+          "config": {
+            "name": "experimento_3_refinamento",
+            "population_size": 40,
+            "generations": 25,
+            "crossover_rate": 0.9,
+            "mutation_rate": 0.05,
+            "tournament_k": 5,
+            "elitism": 4
+          },
+          "best_genes": {
+            "n_estimators": 250,
+            "max_depth": 35,
+            "min_samples_split": 30,
+            "min_samples_leaf": 9
+          },
+          "best_fitness": 0.9600963372574709,
+          "validation_metrics": {
+            "recall": 0.9534883720930233,
+            "specificity": 0.9859154929577465,
+            "f1_score": 0.9647058823529412,
+            "accuracy": 0.9736842105263158,
+            "precision": 0.9761904761904762
+          },
+          "test_metrics": {
+            "recall": 0.8809523809523809,
+            "specificity": 0.9861111111111112,
+            "f1_score": 0.925,
+            "accuracy": 0.9473684210526315,
+            "precision": 0.9736842105263158
+          },
+          "history": [
+            {
+              "generation": 0,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9533039551996634,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 1,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9566198407958006,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 2,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9585359792131722,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 3,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9580947050290801,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 4,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9589772533972646,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 5,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9589752014136804,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 6,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9589752014136804,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 7,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9582973917375662,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 8,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9594185275813567,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 9,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.959976994662916,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 10,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9584166366186173,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 11,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.959976994662916,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 12,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9595358181923276,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 13,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9589772533972646,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 14,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.959976994662916,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 15,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9587407179052427,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 16,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9593031238518426,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 17,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9598576520683608,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 18,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9595357204788236,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 19,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9596550630733786,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 20,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9596550630733786,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 21,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9600963372574709,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 22,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9592989693432067,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 23,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.959976994662916,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            },
+            {
+              "generation": 24,
+              "best_fitness": 0.9600963372574709,
+              "avg_fitness": 0.9573830465694302,
+              "best_genes": {
+                "n_estimators": 250,
+                "max_depth": 35,
+                "min_samples_split": 30,
+                "min_samples_leaf": 9
+              },
+              "best_recall": 0.9534883720930233,
+              "best_specificity": 0.9859154929577465,
+              "best_f1_score": 0.9647058823529412
+            }
+          ],
+          "convergence_plot": "artifacts/ga_study/plots/convergencia_RandomForestClassifier_experimento_3_refinamento.png"
+        }
+      ]
+    }
+  ]
+}

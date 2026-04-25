@@ -9,8 +9,12 @@ from pptx.util import Inches, Pt
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "docs" / "Apresentacao_Algoritmo_Genetico_Cancer_de_Mama.pptx"
-RESULTS_PATH = ROOT / "artifacts" / "experimentos_geneticos.json"
-GRAFICOS_DIR = ROOT / "artifacts" / "graficos"
+RESULTS_PATH = ROOT / "artifacts" / "ga_study" / "results.json"
+GRAFICOS_DIR = ROOT / "artifacts" / "ga_study" / "plots"
+
+
+def _pct(value: float) -> str:
+    return f"{value * 100:.2f}%".replace(".", ",")
 
 
 def add_title_slide(prs: Presentation, title: str, subtitle: str) -> None:
@@ -31,7 +35,14 @@ def add_bullet_slide(prs: Presentation, title: str, bullets: list[str]) -> None:
         paragraph.font.size = Pt(22)
 
 
-def add_two_column_slide(prs: Presentation, title: str, left_title: str, left_bullets: list[str], right_title: str, right_bullets: list[str]) -> None:
+def add_two_column_slide(
+    prs: Presentation,
+    title: str,
+    left_title: str,
+    left_bullets: list[str],
+    right_title: str,
+    right_bullets: list[str],
+) -> None:
     slide = prs.slides.add_slide(prs.slide_layouts[5])
     slide.shapes.title.text = title
 
@@ -66,15 +77,21 @@ def add_image_slide(prs: Presentation, title: str, image_path: Path, caption: st
 
 def build_presentation() -> Path:
     data = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
-    baseline_models = data["modelos_baseline"]
-    baseline_ref = data["baseline"]
-    baseline = data["baseline"]["metrics_teste"]
-    exp1 = data["experimentos_geneticos"][0]
-    exp2 = data["experimentos_geneticos"][1]
-    melhor_baseline = max(
-        baseline_models,
-        key=lambda item: (item["metrics_teste"]["recall"], item["metrics_teste"]["f1_score"], item["metrics_teste"]["specificity"]),
+    models = {item["model_name"]: item for item in data["models"]}
+    summary = data["summary_table"]
+    knn = models["KNeighborsClassifier"]
+    tree = models["DecisionTreeClassifier"]
+    logreg = models["LogisticRegression"]
+    rf = models["RandomForestClassifier"]
+    best_balance = max(
+        data["models"],
+        key=lambda item: (
+            item["optimized_metrics"]["recall"],
+            item["optimized_metrics"]["f1_score"],
+            item["optimized_metrics"]["specificity"],
+        ),
     )
+    recall_gain = max(summary, key=lambda row: row["delta_recall"])
 
     prs = Presentation()
     prs.slide_width = Inches(13.333)
@@ -83,236 +100,180 @@ def build_presentation() -> Path:
     add_title_slide(
         prs,
         "Algoritmo Genetico no Diagnostico de Cancer de Mama em Mulheres",
-        "Tech Challenge Fase 2 | Machine Learning, otimizacao genetica e explicabilidade",
+        "Estudo com 4 modelos baseline e 12 execucoes de otimizacao genetica",
     )
 
     add_bullet_slide(
         prs,
-        "Problema e Objetivo",
+        "Objetivo do Estudo",
         [
-            "Sistema de apoio ao diagnostico com foco na reducao de falsos negativos.",
-            "Comparacao entre multiplos modelos baseline e otimizacao da familia vencedora pelo fitness.",
-            "Explicabilidade em linguagem natural voltada ao contexto profissional.",
-        ],
-    )
-
-    add_bullet_slide(
-        prs,
-        "Dataset Utilizado",
-        [
-            "Breast Cancer Wisconsin Diagnostic.",
-            "569 amostras em um problema de classificacao binaria.",
-            "Classe positiva ajustada para malignidade.",
+            "Comparar modelos baseline e modelos otimizados por Algoritmo Genetico.",
+            "Priorizar recall para reduzir falsos negativos em contexto clinico.",
+            "Analisar trade-offs entre recall, especificidade e F1-score.",
         ],
     )
 
     add_bullet_slide(
         prs,
-        "Arquitetura da Solucao",
+        "Dataset e Preparacao",
         [
-            "Separacao entre dominio, interface, API e camada de experimentacao.",
-            "Entradas principais: pipeline, AG, Streamlit e API.",
-            "Saidas: JSON, JSONL, graficos, logs e modelo exportado.",
+            "Breast Cancer Wisconsin Diagnostic, com 569 amostras.",
+            "Split estratificado: 455 em treino e 114 em teste.",
+            "Normalizacao com StandardScaler e classe positiva igual a malignidade.",
         ],
     )
 
     add_bullet_slide(
         prs,
-        "Algoritmo Genetico",
+        "Modelos Avaliados",
         [
-            f"Genes representando hiperparametros de {baseline_ref['modelo']}.",
-            "Selecao, crossover, mutacao e elitismo.",
-            "Fitness: 55% recall, 25% especificidade, 20% F1.",
-        ],
-    )
-
-    add_two_column_slide(
-        prs,
-        "Experimentos",
-        "Configuracoes testadas",
-        [
-            "Exp. 1: pop. 6 | 3 geracoes | mut. 0,10",
-            "Exp. 2: pop. 8 | 4 geracoes | mut. 0,15",
-            "Exp. 3: pop. 10 | 5 geracoes | mut. 0,20",
-        ],
-        "Camadas adicionais",
-        [
-            "Script dedicado para AG.",
-            "Geracao automatica de graficos.",
-            "UI, API, logging, Docker e Terraform.",
-        ],
-    )
-
-    add_two_column_slide(
-        prs,
-        "Comparacao de Baselines",
-        "Modelos avaliados",
-        [
-            "RandomForestClassifier",
-            "LogisticRegression",
-            "DecisionTreeClassifier",
             "KNeighborsClassifier",
+            "DecisionTreeClassifier",
+            "LogisticRegression",
+            "RandomForestClassifier",
         ],
-        "Melhor baseline em teste",
+    )
+
+    add_bullet_slide(
+        prs,
+        "Configuracao do AG",
         [
-            f"Modelo: {melhor_baseline['modelo']}",
-            f"Recall: {melhor_baseline['metrics_teste']['recall']:.2%}",
-            f"Especificidade: {melhor_baseline['metrics_teste']['specificity']:.2%}",
-            f"F1-score: {melhor_baseline['metrics_teste']['f1_score']:.2%}",
+            "Fitness = 0,6 x recall + 0,3 x F1-score + 0,1 x especificidade.",
+            "Selecao por torneio, crossover, mutacao e elitismo.",
+            "3 experimentos por modelo: exploracao, equilibrio e refinamento.",
         ],
     )
 
     add_two_column_slide(
         prs,
-        "Baseline de Referencia do AG",
-        f"{baseline_ref['modelo']} base",
+        "Baselines no Teste",
+        "Melhores sinais",
         [
-            f"Recall: {baseline['recall']:.2%}",
-            f"Especificidade: {baseline['specificity']:.2%}",
-            f"F1-score: {baseline['f1_score']:.2%}",
-            f"Acuracia: {baseline['accuracy']:.2%}",
+            f"LogisticRegression: recall {_pct(logreg['baseline_metrics']['recall'])}",
+            f"RandomForest: especificidade {_pct(rf['baseline_metrics']['specificity'])}",
+            f"KNN: F1 {_pct(knn['baseline_metrics']['f1_score'])}",
         ],
-        "Leitura tecnica",
+        "Leitura inicial",
         [
-            "A familia de referencia foi escolhida automaticamente pelo fitness.",
-            f"Modelo selecionado: {baseline_ref['modelo']}.",
-            "A comparacao com outros baselines reforca a coerencia da busca evolutiva.",
-        ],
-    )
-
-    add_two_column_slide(
-        prs,
-        "Melhores Configuracoes do AG",
-        "Experimento 1",
-        [
-            "classifier__C = 0.1",
-            "classifier__solver = lbfgs",
-            "scaler__with_mean = True",
-            "scaler__with_std = True",
-        ],
-        "Experimento 2",
-        [
-            "classifier__C = 0.1",
-            "classifier__solver = lbfgs",
-            "scaler__with_mean = True",
-            "scaler__with_std = True",
-            f"F1 teste = {exp2['metrics_teste']['f1_score']:.2%}",
+            "LogisticRegression foi o baseline mais forte no conjunto de teste.",
+            "RandomForest teve baseline robusto, mas nao foi o melhor em recall.",
+            "DecisionTree foi a familia menos equilibrada na partida.",
         ],
     )
 
     add_two_column_slide(
         prs,
-        "Hiperparametros Otimizados",
-        "Experimento 2",
+        "Resultado Final por Modelo",
+        "Maior ganho de recall",
         [
-            "classifier__C = 0.1",
-            "classifier__solver = lbfgs",
-            "scaler__with_mean = True",
-            "scaler__with_std = True",
+            f"Modelo: {recall_gain['modelo']}",
+            f"Recall baseline: {_pct(recall_gain['recall_baseline'])}",
+            f"Recall otimizado: {_pct(recall_gain['recall_otimizado'])}",
+            f"Delta: {(recall_gain['delta_recall'] * 100):.2f}".replace(".", ",") + " p.p.",
         ],
-        "Leitura tecnica",
+        "Melhor equilibrio geral",
         [
-            "Melhor equilibrio no conjunto de teste.",
-            f"Recall = {exp2['metrics_teste']['recall']:.2%}",
-            f"Especificidade = {exp2['metrics_teste']['specificity']:.2%}",
-            f"F1-score = {exp2['metrics_teste']['f1_score']:.2%}",
+            f"Modelo: {best_balance['model_name']}",
+            f"Recall: {_pct(best_balance['optimized_metrics']['recall'])}",
+            f"Especificidade: {_pct(best_balance['optimized_metrics']['specificity'])}",
+            f"F1-score: {_pct(best_balance['optimized_metrics']['f1_score'])}",
+        ],
+    )
+
+    add_two_column_slide(
+        prs,
+        "Melhores Experimentos",
+        "KNN e Decision Tree",
+        [
+            f"KNN: {knn['best_experiment_name']}",
+            "n_neighbors = 2",
+            "weights = distance",
+            "p = 1",
+            f"Recall final = {_pct(knn['optimized_metrics']['recall'])}",
+        ],
+        "LogReg e Random Forest",
+        [
+            f"LogReg: {logreg['best_experiment_name']}",
+            "C = 7.5 | max_iter = 600 | solver = liblinear",
+            f"RF: {rf['best_experiment_name']}",
+            "n_estimators = 400 | max_depth = 30",
+            "min_samples_split = 42 | min_samples_leaf = 3",
+        ],
+    )
+
+    add_two_column_slide(
+        prs,
+        "Trade-offs Observados",
+        "Ganhos",
+        [
+            "KNN aumentou o recall em 2,38 p.p.",
+            "DecisionTree aumentou a especificidade.",
+            "LogisticRegression manteve o melhor equilibrio geral.",
+        ],
+        "Perdas",
+        [
+            "KNN perdeu especificidade e F1.",
+            "DecisionTree perdeu recall.",
+            "RandomForest perdeu recall e F1 no teste.",
         ],
     )
 
     add_image_slide(
         prs,
-        "Comparacao Baseline x AG",
-        GRAFICOS_DIR / "comparacao_experimentos.png",
-        "Comparacao de recall, especificidade e F1-score no conjunto de teste.",
+        "Comparacao Baseline x Otimizado",
+        GRAFICOS_DIR / "comparacao_baseline_vs_otimizado.png",
+        "Comparacao de recall, especificidade e F1-score para os quatro modelos.",
     )
 
     add_image_slide(
         prs,
-        "Resumo dos Experimentos",
-        GRAFICOS_DIR / "resumo_experimentos.png",
-        "Fitness final dos tres experimentos geneticos executados.",
+        "Convergencia do KNN",
+        GRAFICOS_DIR / "convergencia_KNeighborsClassifier_experimento_1_exploracao.png",
+        "O KNN foi a familia com ganho real de recall no conjunto de teste.",
     )
 
     add_image_slide(
         prs,
-        "Convergencia do AG",
-        GRAFICOS_DIR / "convergencia_ag_experimento_2.png",
-        "Evolucao do fitness no experimento com melhor equilibrio no conjunto de teste.",
+        "Convergencia da Logistic Regression",
+        GRAFICOS_DIR / "convergencia_LogisticRegression_experimento_1_exploracao.png",
+        "A regressao logistica mostrou estabilidade e confirmou uma regiao otima forte.",
     )
 
     add_image_slide(
         prs,
-        "Fitness x Hiperparametros",
-        GRAFICOS_DIR / "comportamento_hiperparametros.png",
-        "Leitura do comportamento do fitness frente aos hiperparametros otimizados.",
+        "Convergencia do Random Forest",
+        GRAFICOS_DIR / "convergencia_RandomForestClassifier_experimento_1_exploracao.png",
+        "O ganho em validacao nao se traduziu em melhoria de recall no teste.",
     )
 
     add_bullet_slide(
         prs,
-        "Leitura Parametros x Fitness",
+        "Analise Tecnica",
         [
-            "Os tres experimentos convergiram para a mesma configuracao vencedora.",
-            "O melhor fitness final foi 0,9712.",
-            "A configuracao vencedora usou C=0.1 e solver=lbfgs.",
-            "A baixa variacao nos graficos reflete convergencia rapida para a mesma solucao.",
-        ],
-    )
-
-    add_image_slide(
-        prs,
-        "Metricas por Geracao",
-        GRAFICOS_DIR / "metricas_por_geracao_ag_experimento_2.png",
-        "Evolucao de recall, especificidade e F1 ao longo das geracoes.",
-    )
-
-    add_bullet_slide(
-        prs,
-        "LLM e Explicabilidade",
-        [
-            "Camada desacoplada com suporte a mock e endpoint HTTP.",
-            "Explicacoes com classificacao, probabilidade, cautela clinica e aviso de nao substituicao da avaliacao medica.",
-            "Persistencia automatica das respostas em JSONL.",
+            "Nem toda melhora de fitness em validacao gera ganho de recall no teste.",
+            "KNN foi o unico modelo com ganho real de sensibilidade.",
+            "LogisticRegression permaneceu como melhor recomendacao clinica geral.",
         ],
     )
 
     add_bullet_slide(
         prs,
-        "Interface Web",
+        "Infraestrutura e Operacao",
         [
-            "Metricas, graficos e monitoramento.",
-            "Upload de CSV e simulacao de predicao.",
-            "Historico da LLM e comparacao entre baselines e familia otimizada.",
+            "Interface em Streamlit, API em FastAPI e logging em arquivo.",
+            "Persistencia de artefatos em JSON, JSONL e imagens.",
+            "Docker, docker-compose e estrutura inicial em Terraform.",
         ],
     )
 
     add_bullet_slide(
         prs,
-        "API, Logging e Nuvem",
+        "Conclusao",
         [
-            "FastAPI pronta para integracoes futuras.",
-            "Logging em arquivo e aba de monitoramento.",
-            "Docker e Terraform inicial para nuvem.",
-        ],
-    )
-
-    add_bullet_slide(
-        prs,
-        "Testes e Preparacao Futura",
-        [
-            "Cobertura para nucleo, integracao, UI e API.",
-            "Base modular para workers e servicos desacoplados.",
-            "Preparacao tecnica para a Fase 3.",
-        ],
-    )
-
-    add_bullet_slide(
-        prs,
-        "Conclusoes",
-        [
-            "A comparacao entre quatro baselines ampliou a robustez do estudo.",
-            "A LogisticRegression foi selecionada como referencia pelo fitness.",
-            "O AG melhorou o desempenho dessa mesma familia no conjunto de teste.",
-            "Projeto completo, testado e pronto para evolucao.",
+            "O estudo comparou 4 modelos baseline e 12 execucoes de AG.",
+            "O maior ganho de recall foi do KNN, com 2,38 p.p.",
+            "A melhor recomendacao final permaneceu em LogisticRegression.",
+            "O projeto ficou coerente com os resultados reais gerados pelo estudo.",
         ],
     )
 
