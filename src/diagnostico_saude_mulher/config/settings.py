@@ -27,3 +27,4 @@ class AppSettings:
     target_name: str = "diagnostico_maligno"
     positive_label: int = 1
     model_output_dir: Path = Path("artifacts/modelos")
+    log_output_dir: Path = Path("artifacts/logs")

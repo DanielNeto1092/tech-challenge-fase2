@@ -1,0 +1,13 @@
+services:
+  diagnostico-saude-mulher:
+    build: .
+    container_name: diagnostico-saude-mulher
+    ports:
+      - "8501:8501"
+    environment:
+      LLM_PROVIDER: mock
+      LLM_OUTPUT_PATH: /app/artifacts/llm_responses.jsonl
+      MPLCONFIGDIR: /tmp/matplotlib
+    volumes:
+      - ./artifacts:/app/artifacts
+    restart: unless-stopped

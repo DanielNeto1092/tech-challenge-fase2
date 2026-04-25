@@ -4,13 +4,13 @@
 
 Este projeto implementa uma solucao completa em Python para otimizar hiperparametros de modelos de Machine Learning usando Algoritmos Geneticos, com foco em apoio diagnostico para saude da mulher. O caso de uso escolhido foi classificacao de lesoes mamarias com base no dataset publico **Breast Cancer Wisconsin Diagnostic**, disponivel no `scikit-learn`.
 
-O sistema compara um modelo base com modelos otimizados por algoritmo genetico, priorizando **recall/sensibilidade** para reduzir risco de falso negativo em casos malignos. Tambem inclui um modulo desacoplado de LLM para gerar explicacoes em linguagem natural com cuidado etico, sem dependencia obrigatoria de API paga.
+O sistema compara quatro modelos baseline e, em seguida, seleciona automaticamente o modelo mais performatico pela mesma funcao de fitness usada no AG. A familia vencedora passa a ser otimizada por algoritmo genetico, priorizando **recall/sensibilidade** para reduzir risco de falso negativo em casos malignos. Tambem inclui um modulo desacoplado de LLM para gerar explicacoes em linguagem natural com cuidado etico, sem dependencia obrigatoria de API paga.
 
 ## Objetivo do projeto
 
-- Treinar um modelo base de classificacao.
+- Treinar e comparar multiplos modelos baseline de classificacao.
 - Otimizar hiperparametros com algoritmo genetico.
-- Comparar modelo base vs modelos otimizados.
+- Comparar modelos baseline vs modelo otimizado pela mesma funcao de fitness.
 - Gerar explicacoes em linguagem natural para apoio ao profissional de saude.
 - Persistir respostas da LLM em JSONL para reuso futuro.
 - Documentar arquitetura, execucao, consideracoes eticas e testes.
@@ -30,20 +30,24 @@ Observacao: o dataset nao possui variaveis demograficas apropriadas para uma ana
 artifacts/
   llm_responses.jsonl
   modelos/
+  graficos/
 src/
   diagnostico_saude_mulher/
     config/
     data/
     evaluation/
+    experiments/
     genetic_algorithm/
     llm/
     models/
     utils/
+    visualization/
 tests/
 docs/
 notebooks/
 main.py
-run_project.py
+app.py
+run_genetic_optimization.py
 README.md
 requirements.txt
 .env.example
@@ -62,23 +66,48 @@ pip install -r requirements.txt
 Execucao principal:
 
 ```bash
-python3 main.py
-```
-
-ou
-
-```bash
-python3 run_project.py
+PYTHONPATH=src python3 main.py
 ```
 
 O comando executa:
 
 - carregamento do dataset;
-- treinamento do modelo base;
+- comparacao entre `RandomForestClassifier`, `LogisticRegression`, `DecisionTreeClassifier` e `KNeighborsClassifier`;
 - 3 experimentos com algoritmo genetico;
 - comparacao de metricas;
 - geracao de explicacao pela LLM configurada;
 - persistencia da resposta em `artifacts/llm_responses.jsonl`.
+
+## Como executar a API
+
+Subir a API local:
+
+```bash
+PYTHONPATH=src ./.venv/bin/uvicorn api:app --host 0.0.0.0 --port 8000
+```
+
+Endpoints principais:
+
+- `GET /health`
+- `GET /dataset`
+- `POST /baseline`
+- `POST /optimize`
+- `POST /predict`
+- `GET /llm/history`
+- `GET /logs`
+
+## Como rodar a otimizacao genetica com graficos
+
+```bash
+PYTHONPATH=src python3 run_genetic_optimization.py
+```
+
+Saidas geradas:
+
+- `artifacts/experimentos_geneticos.json`
+- `artifacts/graficos/comparacao_experimentos.png`
+- `artifacts/graficos/resumo_experimentos.png`
+- `artifacts/graficos/convergencia_ag_experimento_*.png`
 
 ## Como treinar e exportar o modelo final
 
@@ -93,6 +122,55 @@ Arquivos gerados em `artifacts/modelos/`:
 - `modelo_cancer_mama.joblib`
 - `metricas_modelo_final.json`
 - `colunas_entrada.json`
+
+## Como abrir a interface web
+
+```bash
+streamlit run app.py
+```
+
+A interface permite:
+
+- visualizar os modelos baseline e os experimentos geneticos;
+- inspecionar graficos comparativos;
+- simular uma predicao em cima de uma amostra do conjunto de teste;
+- gerar uma explicacao textual via `mock` ou `http`.
+
+## Como executar com Docker
+
+Build e subida da interface web:
+
+```bash
+docker-compose up --build
+```
+
+Depois acesse:
+
+- `http://localhost:8501`
+
+O compose sobe a interface Streamlit com `LLM_PROVIDER=mock` por padrao e persiste os artefatos em `./artifacts`.
+
+## Monitoramento e logging
+
+O projeto grava logs em:
+
+- `artifacts/logs/aplicacao.log`
+
+Os logs incluem:
+
+- treinamento do modelo;
+- execucao do algoritmo genetico;
+- metricas por geracao;
+- chamadas e persistencia da LLM;
+- erros de execucao quando propagados para logging.
+
+Para acompanhar:
+
+```bash
+tail -f artifacts/logs/aplicacao.log
+```
+
+Na interface Streamlit existe uma aba de monitoramento que exibe o caminho do log e as ultimas linhas registradas.
 
 ## Como rodar testes
 
@@ -117,9 +195,26 @@ Principais variaveis:
 - `LLM_OUTPUT_PATH`: caminho do arquivo JSONL de saida
 - `LOG_LEVEL`: nivel de log
 
+## Infraestrutura e escalabilidade
+
+O projeto ja esta preparado para execucao via container com:
+
+- [Dockerfile](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/Dockerfile)
+- [docker-compose.yml](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/docker-compose.yml)
+
+Tambem foi incluida uma estrutura inicial de Infraestrutura como Codigo em:
+
+- [infra/terraform/main.tf](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/infra/terraform/main.tf)
+- [infra/terraform/variables.tf](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/infra/terraform/variables.tf)
+- [infra/terraform/outputs.tf](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/infra/terraform/outputs.tf)
+
+Arquitetura proposta e estrategia de escala:
+
+- [docs/cloud_architecture.md](/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/docs/cloud_architecture.md)
+
 ## Como funciona o algoritmo genetico
 
-O algoritmo genetico otimiza hiperparametros de um `RandomForestClassifier`:
+O algoritmo genetico otimiza hiperparametros da familia de modelo selecionada automaticamente pela funcao de fitness depois da comparacao entre baselines:
 
 - representacao genetica: dicionario de hiperparametros;
 - populacao inicial: individuos aleatorios no espaco de busca;
@@ -153,6 +248,17 @@ Configuracoes executadas:
 1. Populacao `6`, geracoes `3`, mutacao `0.10`, selecao `tournament`
 2. Populacao `8`, geracoes `4`, mutacao `0.15`, selecao `tournament`
 3. Populacao `10`, geracoes `5`, mutacao `0.20`, selecao `roulette`
+
+## Modelos baseline comparados
+
+O projeto compara os seguintes algoritmos antes da etapa genetica:
+
+- `RandomForestClassifier`
+- `LogisticRegression`
+- `DecisionTreeClassifier`
+- `KNeighborsClassifier`
+
+Na execucao atual, a `LogisticRegression` foi o modelo de referencia selecionado pelo fitness. Por isso, os experimentos geneticos passaram a otimizar essa familia, e nao mais um modelo fixado manualmente.
 
 ## Integracao com LLM
 
@@ -190,6 +296,7 @@ Cobertura incluida para:
 - treinamento basico do modelo;
 - integracao do pipeline principal;
 - exportacao de artefatos do modelo final;
+- geracao de graficos;
 - geracao de prompt;
 - cliente mock da LLM;
 - persistencia do JSONL.
@@ -201,6 +308,15 @@ Cobertura incluida para:
 - Priorizar recall reduz falso negativo, mas pode elevar falso positivo.
 - O projeto evita expor credenciais no codigo.
 - A estrutura admite monitoramento futuro de viés e equidade com datasets adequados.
+
+## Decisoes tecnicas
+
+- O dataset foi escolhido por ser publico, reprodutivel e aderente ao dominio de saude da mulher.
+- O modelo de referencia do AG nao e fixo: ele e escolhido automaticamente pelo melhor fitness entre os baselines.
+- Os hiperparametros otimizados dependem da familia vencedora no baseline, o que torna a busca evolutiva coerente com o melhor candidato encontrado.
+- A fitness prioriza recall porque falso negativo em contexto oncologico e clinicamente mais sensivel.
+- A camada de LLM foi desacoplada para permitir mock local, integracao HTTP e futura evolucao para a Fase 3.
+- A arquitetura modular prepara a base para execucao assincrona, workers dedicados, API separada e servicos desacoplados na Fase 3.
 
 ## Documentacao tecnica
 

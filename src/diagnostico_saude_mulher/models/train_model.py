@@ -8,16 +8,23 @@ import joblib
 
 from diagnostico_saude_mulher.config.settings import AppSettings
 from diagnostico_saude_mulher.data.datasets import carregar_dataset_cancer_mama
-from diagnostico_saude_mulher.models.training import criar_modelo_base, treinar_e_avaliar_modelo
+from diagnostico_saude_mulher.experiments.runner import run_experiments
+from diagnostico_saude_mulher.models.training import criar_modelo_otimizado_por_nome, treinar_e_avaliar_modelo
 
 
 def treinar_e_exportar_modelo_final(output_dir: Path | None = None) -> dict[str, object]:
-    """Treina o modelo final baseline e exporta artefatos para uso posterior."""
+    """Treina o modelo baseline de melhor fitness e exporta artefatos para uso posterior."""
 
     settings = AppSettings()
     dataset = carregar_dataset_cancer_mama(settings)
+    _, baseline_referencia, _ = run_experiments(settings, dataset, [])
+    modelo_referencia = criar_modelo_otimizado_por_nome(
+        baseline_referencia.modelo,
+        baseline_referencia.parametros,
+        settings.random_seed,
+    )
     bundle = treinar_e_avaliar_modelo(
-        criar_modelo_base(settings.random_seed),
+        modelo_referencia,
         dataset.X_treino,
         dataset.y_treino,
         dataset.X_teste,
@@ -35,6 +42,7 @@ def treinar_e_exportar_modelo_final(output_dir: Path | None = None) -> dict[str,
     joblib.dump(bundle.modelo, modelo_path)
     metricas_payload = {
         "dataset": dataset.nome,
+        "modelo": baseline_referencia.modelo,
         "metrics_cv": bundle.metrics_cv.to_dict(),
         "metrics_teste": bundle.metrics_teste.to_dict(),
     }
@@ -45,6 +53,7 @@ def treinar_e_exportar_modelo_final(output_dir: Path | None = None) -> dict[str,
         "modelo_path": str(modelo_path),
         "metricas_path": str(metricas_path),
         "colunas_path": str(colunas_path),
+        "modelo": baseline_referencia.modelo,
         "metrics_cv": asdict(bundle.metrics_cv),
         "metrics_teste": asdict(bundle.metrics_teste),
     }

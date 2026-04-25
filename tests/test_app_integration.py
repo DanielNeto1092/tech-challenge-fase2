@@ -16,11 +16,15 @@ class AppIntegrationTests(unittest.TestCase):
             output_path = Path(directory) / "llm.jsonl"
             with mock.patch.dict("os.environ", {"LLM_OUTPUT_PATH": str(output_path), "LLM_PROVIDER": "mock"}, clear=False):
                 payload = executar_experimentos()
+            self.assertIn("modelos_baseline", payload)
             self.assertIn("baseline", payload)
             self.assertIn("experimentos_geneticos", payload)
             self.assertIn("comparacao", payload)
             self.assertIn("explicacao_llm", payload)
+            self.assertEqual(len(payload["modelos_baseline"]), 4)
             self.assertEqual(len(payload["experimentos_geneticos"]), 3)
+            self.assertEqual(payload["baseline"]["modelo"], "LogisticRegression")
+            self.assertTrue(all(item["modelo"] == "LogisticRegression" for item in payload["experimentos_geneticos"]))
             self.assertTrue(output_path.exists())
 
     def test_treinamento_exporta_artefatos(self) -> None:

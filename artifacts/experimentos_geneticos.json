@@ -1,0 +1,647 @@
+{
+  "dataset": {
+    "nome": "Breast Cancer Wisconsin Diagnostic",
+    "descricao": ".. _breast_cancer_dataset:",
+    "amostras": 569
+  },
+  "modelos_baseline": [
+    {
+      "nome_experimento": "baseline_randomforest",
+      "modelo": "RandomForestClassifier",
+      "algoritmo": "baseline",
+      "parametros": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": "balanced",
+        "criterion": "gini",
+        "max_depth": 6,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 2,
+        "min_samples_split": 4,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "n_estimators": 120,
+        "n_jobs": -1,
+        "oob_score": false,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false
+      },
+      "metrics_cv": {
+        "recall": 0.9411764705882353,
+        "specificity": 0.9649122807017544,
+        "f1_score": 0.9411764705882353,
+        "accuracy": 0.9560439560439561,
+        "roc_auc": 0.9890608875128999,
+        "precision": 0.9411764705882353,
+        "fairness_gap": null
+      },
+      "metrics_teste": {
+        "recall": 0.9285714285714286,
+        "specificity": 0.9861111111111112,
+        "f1_score": 0.9512195121951219,
+        "accuracy": 0.9649122807017544,
+        "roc_auc": 0.9970238095238094,
+        "precision": 0.975,
+        "fairness_gap": null
+      },
+      "fitness_cv": 0.9471104231166151,
+      "historico_geracoes": [],
+      "rotulo_exibicao": "baseline_randomforest (RandomForestClassifier)"
+    },
+    {
+      "nome_experimento": "baseline_logistic_regression",
+      "modelo": "LogisticRegression",
+      "algoritmo": "baseline",
+      "parametros": {
+        "memory": null,
+        "steps": [
+          [
+            "scaler",
+            "StandardScaler()"
+          ],
+          [
+            "classifier",
+            "LogisticRegression(class_weight='balanced', max_iter=2000, random_state=42)"
+          ]
+        ],
+        "transform_input": null,
+        "verbose": false,
+        "scaler": "StandardScaler()",
+        "classifier": "LogisticRegression(class_weight='balanced', max_iter=2000, random_state=42)",
+        "scaler__copy": true,
+        "scaler__with_mean": true,
+        "scaler__with_std": true,
+        "classifier__C": 1.0,
+        "classifier__class_weight": "balanced",
+        "classifier__dual": false,
+        "classifier__fit_intercept": true,
+        "classifier__intercept_scaling": 1,
+        "classifier__l1_ratio": 0.0,
+        "classifier__max_iter": 2000,
+        "classifier__n_jobs": null,
+        "classifier__penalty": "deprecated",
+        "classifier__random_state": 42,
+        "classifier__solver": "lbfgs",
+        "classifier__tol": 0.0001,
+        "classifier__verbose": 0,
+        "classifier__warm_start": false
+      },
+      "metrics_cv": {
+        "recall": 0.9647058823529412,
+        "specificity": 0.9789473684210527,
+        "f1_score": 0.9647058823529412,
+        "accuracy": 0.9736263736263736,
+        "roc_auc": 0.9949432404540763,
+        "precision": 0.9647058823529412,
+        "fairness_gap": null
+      },
+      "metrics_teste": {
+        "recall": 0.9523809523809523,
+        "specificity": 0.9861111111111112,
+        "f1_score": 0.963855421686747,
+        "accuracy": 0.9736842105263158,
+        "roc_auc": 0.9953703703703703,
+        "precision": 0.975609756097561,
+        "fairness_gap": null
+      },
+      "fitness_cv": 0.9682662538699691,
+      "historico_geracoes": [],
+      "rotulo_exibicao": "baseline_logistic_regression (LogisticRegression)"
+    },
+    {
+      "nome_experimento": "baseline_decisiontree",
+      "modelo": "DecisionTreeClassifier",
+      "algoritmo": "baseline",
+      "parametros": {
+        "ccp_alpha": 0.0,
+        "class_weight": "balanced",
+        "criterion": "gini",
+        "max_depth": 6,
+        "max_features": null,
+        "max_leaf_nodes": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 2,
+        "min_samples_split": 4,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "random_state": 42,
+        "splitter": "best"
+      },
+      "metrics_cv": {
+        "recall": 0.8823529411764706,
+        "specificity": 0.9228070175438596,
+        "f1_score": 0.8771929824561403,
+        "accuracy": 0.9076923076923077,
+        "roc_auc": 0.9199793601651186,
+        "precision": 0.872093023255814,
+        "fairness_gap": null
+      },
+      "metrics_teste": {
+        "recall": 0.8571428571428571,
+        "specificity": 0.9444444444444444,
+        "f1_score": 0.8780487804878049,
+        "accuracy": 0.9122807017543859,
+        "roc_auc": 0.9178240740740742,
+        "precision": 0.9,
+        "fairness_gap": null
+      },
+      "fitness_cv": 0.8914344685242518,
+      "historico_geracoes": [],
+      "rotulo_exibicao": "baseline_decisiontree (DecisionTreeClassifier)"
+    },
+    {
+      "nome_experimento": "baseline_kneighbors",
+      "modelo": "KNeighborsClassifier",
+      "algoritmo": "baseline",
+      "parametros": {
+        "memory": null,
+        "steps": [
+          [
+            "scaler",
+            "StandardScaler()"
+          ],
+          [
+            "classifier",
+            "KNeighborsClassifier(n_neighbors=7, weights='distance')"
+          ]
+        ],
+        "transform_input": null,
+        "verbose": false,
+        "scaler": "StandardScaler()",
+        "classifier": "KNeighborsClassifier(n_neighbors=7, weights='distance')",
+        "scaler__copy": true,
+        "scaler__with_mean": true,
+        "scaler__with_std": true,
+        "classifier__algorithm": "auto",
+        "classifier__leaf_size": 30,
+        "classifier__metric": "minkowski",
+        "classifier__metric_params": null,
+        "classifier__n_jobs": null,
+        "classifier__n_neighbors": 7,
+        "classifier__p": 2,
+        "classifier__weights": "distance"
+      },
+      "metrics_cv": {
+        "recall": 0.9176470588235294,
+        "specificity": 0.9859649122807017,
+        "f1_score": 0.9454545454545454,
+        "accuracy": 0.9604395604395605,
+        "roc_auc": 0.98546955624355,
+        "precision": 0.975,
+        "fairness_gap": null
+      },
+      "metrics_teste": {
+        "recall": 0.9047619047619048,
+        "specificity": 0.9861111111111112,
+        "f1_score": 0.9382716049382716,
+        "accuracy": 0.956140350877193,
+        "roc_auc": 0.9834656084656084,
+        "precision": 0.9743589743589743,
+        "fairness_gap": null
+      },
+      "fitness_cv": 0.9402880195140257,
+      "historico_geracoes": [],
+      "rotulo_exibicao": "baseline_kneighbors (KNeighborsClassifier)"
+    }
+  ],
+  "baseline": {
+    "nome_experimento": "baseline_logistic_regression",
+    "modelo": "LogisticRegression",
+    "algoritmo": "baseline",
+    "parametros": {
+      "memory": null,
+      "steps": [
+        [
+          "scaler",
+          "StandardScaler()"
+        ],
+        [
+          "classifier",
+          "LogisticRegression(class_weight='balanced', max_iter=2000, random_state=42)"
+        ]
+      ],
+      "transform_input": null,
+      "verbose": false,
+      "scaler": "StandardScaler()",
+      "classifier": "LogisticRegression(class_weight='balanced', max_iter=2000, random_state=42)",
+      "scaler__copy": true,
+      "scaler__with_mean": true,
+      "scaler__with_std": true,
+      "classifier__C": 1.0,
+      "classifier__class_weight": "balanced",
+      "classifier__dual": false,
+      "classifier__fit_intercept": true,
+      "classifier__intercept_scaling": 1,
+      "classifier__l1_ratio": 0.0,
+      "classifier__max_iter": 2000,
+      "classifier__n_jobs": null,
+      "classifier__penalty": "deprecated",
+      "classifier__random_state": 42,
+      "classifier__solver": "lbfgs",
+      "classifier__tol": 0.0001,
+      "classifier__verbose": 0,
+      "classifier__warm_start": false
+    },
+    "metrics_cv": {
+      "recall": 0.9647058823529412,
+      "specificity": 0.9789473684210527,
+      "f1_score": 0.9647058823529412,
+      "accuracy": 0.9736263736263736,
+      "roc_auc": 0.9949432404540763,
+      "precision": 0.9647058823529412,
+      "fairness_gap": null
+    },
+    "metrics_teste": {
+      "recall": 0.9523809523809523,
+      "specificity": 0.9861111111111112,
+      "f1_score": 0.963855421686747,
+      "accuracy": 0.9736842105263158,
+      "roc_auc": 0.9953703703703703,
+      "precision": 0.975609756097561,
+      "fairness_gap": null
+    },
+    "fitness_cv": 0.9682662538699691,
+    "historico_geracoes": [],
+    "rotulo_exibicao": "baseline_logistic_regression (LogisticRegression)"
+  },
+  "experimentos_geneticos": [
+    {
+      "nome_experimento": "ag_experimento_1",
+      "modelo": "LogisticRegression",
+      "algoritmo": "genetico",
+      "parametros": {
+        "classifier__C": 0.1,
+        "classifier__solver": "lbfgs",
+        "scaler__with_mean": true,
+        "scaler__with_std": true
+      },
+      "metrics_cv": {
+        "recall": 0.9647058823529412,
+        "specificity": 0.9859649122807017,
+        "f1_score": 0.9704142011834319,
+        "accuracy": 0.978021978021978,
+        "roc_auc": 0.994592363261094,
+        "precision": 0.9761904761904762,
+        "fairness_gap": null
+      },
+      "metrics_teste": {
+        "recall": 0.9761904761904762,
+        "specificity": 1.0,
+        "f1_score": 0.9879518072289156,
+        "accuracy": 0.9912280701754386,
+        "roc_auc": 0.9976851851851852,
+        "precision": 1.0,
+        "fairness_gap": null
+      },
+      "fitness_cv": 0.9711623036009795,
+      "historico_geracoes": [
+        {
+          "generation": 0,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9556653522562252,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 1,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9658673216232044,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 2,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9706796286458111,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        }
+      ],
+      "rotulo_exibicao": "ag_experimento_1 (LogisticRegression)"
+    },
+    {
+      "nome_experimento": "ag_experimento_2",
+      "modelo": "LogisticRegression",
+      "algoritmo": "genetico",
+      "parametros": {
+        "classifier__C": 0.1,
+        "classifier__solver": "lbfgs",
+        "scaler__with_mean": true,
+        "scaler__with_std": true
+      },
+      "metrics_cv": {
+        "recall": 0.9647058823529412,
+        "specificity": 0.9859649122807017,
+        "f1_score": 0.9704142011834319,
+        "accuracy": 0.978021978021978,
+        "roc_auc": 0.994592363261094,
+        "precision": 0.9761904761904762,
+        "fairness_gap": null
+      },
+      "metrics_teste": {
+        "recall": 0.9761904761904762,
+        "specificity": 1.0,
+        "f1_score": 0.9879518072289156,
+        "accuracy": 0.9912280701754386,
+        "roc_auc": 0.9976851851851852,
+        "precision": 1.0,
+        "fairness_gap": null
+      },
+      "fitness_cv": 0.9711623036009795,
+      "historico_geracoes": [
+        {
+          "generation": 0,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9606890456359891,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 1,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.967487651520121,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 2,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9700762849518506,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 3,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9706199220240871,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        }
+      ],
+      "rotulo_exibicao": "ag_experimento_2 (LogisticRegression)"
+    },
+    {
+      "nome_experimento": "ag_experimento_3",
+      "modelo": "LogisticRegression",
+      "algoritmo": "genetico",
+      "parametros": {
+        "classifier__C": 0.1,
+        "classifier__solver": "lbfgs",
+        "scaler__with_mean": true,
+        "scaler__with_std": true
+      },
+      "metrics_cv": {
+        "recall": 0.9647058823529412,
+        "specificity": 0.9859649122807017,
+        "f1_score": 0.9704142011834319,
+        "accuracy": 0.978021978021978,
+        "roc_auc": 0.994592363261094,
+        "precision": 0.9761904761904762,
+        "fairness_gap": null
+      },
+      "metrics_teste": {
+        "recall": 0.9761904761904762,
+        "specificity": 1.0,
+        "f1_score": 0.9879518072289156,
+        "accuracy": 0.9912280701754386,
+        "roc_auc": 0.9976851851851852,
+        "precision": 1.0,
+        "fairness_gap": null
+      },
+      "fitness_cv": 0.9711623036009795,
+      "historico_geracoes": [
+        {
+          "generation": 0,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9653372209964832,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 1,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9649526255160623,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 2,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9665876037261775,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 3,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.9679360046332214,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        },
+        {
+          "generation": 4,
+          "best_fitness": 0.9711623036009795,
+          "avg_fitness": 0.966974222480353,
+          "best_genes": {
+            "classifier__C": 0.1,
+            "classifier__solver": "lbfgs",
+            "scaler__with_mean": true,
+            "scaler__with_std": true
+          },
+          "best_recall": 0.9647058823529412,
+          "best_specificity": 0.9859649122807017,
+          "best_f1_score": 0.9704142011834319
+        }
+      ],
+      "rotulo_exibicao": "ag_experimento_3 (LogisticRegression)"
+    }
+  ],
+  "melhor_experimento": {
+    "nome_experimento": "ag_experimento_1",
+    "modelo": "LogisticRegression",
+    "algoritmo": "genetico",
+    "parametros": {
+      "classifier__C": 0.1,
+      "classifier__solver": "lbfgs",
+      "scaler__with_mean": true,
+      "scaler__with_std": true
+    },
+    "metrics_cv": {
+      "recall": 0.9647058823529412,
+      "specificity": 0.9859649122807017,
+      "f1_score": 0.9704142011834319,
+      "accuracy": 0.978021978021978,
+      "roc_auc": 0.994592363261094,
+      "precision": 0.9761904761904762,
+      "fairness_gap": null
+    },
+    "metrics_teste": {
+      "recall": 0.9761904761904762,
+      "specificity": 1.0,
+      "f1_score": 0.9879518072289156,
+      "accuracy": 0.9912280701754386,
+      "roc_auc": 0.9976851851851852,
+      "precision": 1.0,
+      "fairness_gap": null
+    },
+    "fitness_cv": 0.9711623036009795,
+    "historico_geracoes": [
+      {
+        "generation": 0,
+        "best_fitness": 0.9711623036009795,
+        "avg_fitness": 0.9556653522562252,
+        "best_genes": {
+          "classifier__C": 0.1,
+          "classifier__solver": "lbfgs",
+          "scaler__with_mean": true,
+          "scaler__with_std": true
+        },
+        "best_recall": 0.9647058823529412,
+        "best_specificity": 0.9859649122807017,
+        "best_f1_score": 0.9704142011834319
+      },
+      {
+        "generation": 1,
+        "best_fitness": 0.9711623036009795,
+        "avg_fitness": 0.9658673216232044,
+        "best_genes": {
+          "classifier__C": 0.1,
+          "classifier__solver": "lbfgs",
+          "scaler__with_mean": true,
+          "scaler__with_std": true
+        },
+        "best_recall": 0.9647058823529412,
+        "best_specificity": 0.9859649122807017,
+        "best_f1_score": 0.9704142011834319
+      },
+      {
+        "generation": 2,
+        "best_fitness": 0.9711623036009795,
+        "avg_fitness": 0.9706796286458111,
+        "best_genes": {
+          "classifier__C": 0.1,
+          "classifier__solver": "lbfgs",
+          "scaler__with_mean": true,
+          "scaler__with_std": true
+        },
+        "best_recall": 0.9647058823529412,
+        "best_specificity": 0.9859649122807017,
+        "best_f1_score": 0.9704142011834319
+      }
+    ],
+    "rotulo_exibicao": "ag_experimento_1 (LogisticRegression)"
+  },
+  "comparacao": {
+    "baseline_vs_melhor": {
+      "modelo_referencia": "LogisticRegression",
+      "modelo_otimizado": "LogisticRegression",
+      "fitness_baseline_cv": 0.9682662538699691,
+      "fitness_melhor_cv": 0.9711623036009795,
+      "recall_delta": 0.023809523809523836,
+      "specificity_delta": 0.01388888888888884,
+      "f1_delta": 0.02409638554216864
+    }
+  },
+  "explicacao_llm": {
+    "classificacao": "benigno",
+    "probabilidade": 0.007724863633005783,
+    "contexto_clinico": "Paciente com exame de imagem e achados citologicos em investigacao de lesao mamaria.",
+    "system_prompt": "Voce e uma assistente para apoio a diagnostico em saude da mulher. Escreva em portugues, com linguagem sensivel a genero, cautelosa e apropriada para profissionais de saude. Nao afirme diagnostico definitivo. Explique limites do modelo e sempre reforce que a decisao depende de avaliacao medica.",
+    "user_prompt": "Gere uma explicacao clinica objetiva para profissional de saude.\nClassificacao prevista: benigno.\nProbabilidade estimada de malignidade: 0.77%.\nRecall do modelo: 97.62%.\nEspecificidade do modelo: 100.00%.\nF1-score do modelo: 98.80%.\nContexto clinico: Paciente com exame de imagem e achados citologicos em investigacao de lesao mamaria..\nA resposta deve conter:\n- interpretacao cautelosa;\n- orientacoes praticas para a equipe clinica;\n- linguagem sensivel a genero;\n- aviso de que o sistema nao substitui avaliacao medica.",
+    "resposta": "Resumo clinico assistido: a classificacao prevista foi benigno, com probabilidade estimada de malignidade em 0.77%. O resultado sugere risco baixo, mas deve ser usado apenas como apoio a priorizacao diagnostica. Confirme com avaliacao medica, exame fisico, imagem e conduta especializada.",
+    "provider": "mock",
+    "model": "gpt-4o-mini"
+  },
+  "graficos": [
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/comparacao_experimentos.png",
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/resumo_experimentos.png",
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/comportamento_hiperparametros.png",
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/convergencia_ag_experimento_1.png",
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/metricas_por_geracao_ag_experimento_1.png",
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/convergencia_ag_experimento_2.png",
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/metricas_por_geracao_ag_experimento_2.png",
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/convergencia_ag_experimento_3.png",
+    "/mnt/c/desenvolvimento/repositorio/tech-challenge-fase2/artifacts/graficos/metricas_por_geracao_ag_experimento_3.png"
+  ]
+}

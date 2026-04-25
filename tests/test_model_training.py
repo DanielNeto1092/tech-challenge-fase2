@@ -4,10 +4,19 @@ import unittest
 
 from diagnostico_saude_mulher.config.settings import AppSettings
 from diagnostico_saude_mulher.data.datasets import carregar_dataset_cancer_mama
-from diagnostico_saude_mulher.models.training import criar_modelo_base, treinar_e_avaliar_modelo
+from diagnostico_saude_mulher.models.training import criar_catalogo_modelos_baseline, criar_modelo_base, treinar_e_avaliar_modelo
 
 
 class ModelTrainingTests(unittest.TestCase):
+    def test_catalogo_de_modelos_baseline_contem_modelos_esperados(self) -> None:
+        modelos = criar_catalogo_modelos_baseline(42)
+        self.assertEqual(set(modelos.keys()), {
+            "RandomForestClassifier",
+            "LogisticRegression",
+            "DecisionTreeClassifier",
+            "KNeighborsClassifier",
+        })
+
     def test_treinamento_basico_retorna_metricas_validas(self) -> None:
         settings = AppSettings()
         dataset = carregar_dataset_cancer_mama(settings)

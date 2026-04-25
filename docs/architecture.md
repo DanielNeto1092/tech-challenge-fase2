@@ -50,6 +50,15 @@ Dataset -> Preparacao -> Modelo Base -> Avaliacao
 - Gera prompts especializados para saude da mulher.
 - Persiste respostas em JSONL.
 
+### `experiments`
+
+- Orquestra baseline, execucao dos experimentos geneticos, escolha do melhor modelo e comparacao final.
+- Permite reaproveitar a mesma logica em `main.py`, `run_genetic_optimization.py` e `app.py`.
+
+### `visualization`
+
+- Gera graficos de convergencia, comparacao e resumo dos experimentos.
+
 ### `utils`
 
 - Configura logging padronizado.
@@ -65,6 +74,7 @@ Dataset -> Preparacao -> Modelo Base -> Avaliacao
 7. Geracao de explicacao em linguagem natural.
 8. Persistencia da resposta em arquivo JSONL.
 9. Exportacao opcional do modelo final treinado.
+10. Geracao opcional de graficos para acompanhamento dos experimentos.
 
 ## Decisoes tecnicas
 

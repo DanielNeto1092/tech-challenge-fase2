@@ -11,16 +11,39 @@ import pandas as pd
 from diagnostico_saude_mulher.config.settings import AppSettings
 from diagnostico_saude_mulher.evaluation.metrics import FitnessWeights, calcular_fitness
 from diagnostico_saude_mulher.models.schemas import ClassificationMetrics
-from diagnostico_saude_mulher.models.training import avaliar_por_validacao_cruzada, criar_modelo_random_forest
+from diagnostico_saude_mulher.models.training import avaliar_por_validacao_cruzada, criar_modelo_otimizado_por_nome
 
 LOGGER = logging.getLogger(__name__)
 
-ESPACO_BUSCA: dict[str, list[Any]] = {
-    "n_estimators": [80, 120, 160, 220, 300],
-    "max_depth": [3, 4, 5, 6, 8, 10, 12],
-    "min_samples_split": [2, 4, 6, 8, 10],
-    "min_samples_leaf": [1, 2, 3, 4],
-    "max_features": ["sqrt", "log2", None],
+ESPACOS_BUSCA: dict[str, dict[str, list[Any]]] = {
+    "RandomForestClassifier": {
+        "n_estimators": [80, 120, 160, 220, 300],
+        "max_depth": [3, 4, 5, 6, 8, 10, 12],
+        "min_samples_split": [2, 4, 6, 8, 10],
+        "min_samples_leaf": [1, 2, 3, 4],
+        "max_features": ["sqrt", "log2", None],
+    },
+    "LogisticRegression": {
+        "classifier__C": [0.01, 0.1, 1.0, 3.0, 10.0],
+        "classifier__solver": ["lbfgs", "liblinear"],
+        "scaler__with_mean": [True],
+        "scaler__with_std": [True],
+    },
+    "DecisionTreeClassifier": {
+        "max_depth": [3, 4, 5, 6, 8, 10, 12],
+        "min_samples_split": [2, 4, 6, 8, 10],
+        "min_samples_leaf": [1, 2, 3, 4],
+        "criterion": ["gini", "entropy"],
+        "splitter": ["best", "random"],
+    },
+    "KNeighborsClassifier": {
+        "classifier__n_neighbors": [3, 5, 7, 9, 11],
+        "classifier__weights": ["uniform", "distance"],
+        "classifier__p": [1, 2],
+        "classifier__leaf_size": [20, 30, 40],
+        "scaler__with_mean": [True],
+        "scaler__with_std": [True],
+    },
 }
 
 
@@ -74,18 +97,23 @@ class GeneticSearchResult:
 
 
 class HyperparameterGeneticOptimizer:
-    """Otimizador genético de hiperparâmetros para RandomForest."""
+    """Otimizador genético de hiperparâmetros para a família de modelo escolhida."""
 
     def __init__(
         self,
+        model_name: str,
         config: GeneticConfig,
         settings: AppSettings,
         fitness_weights: FitnessWeights | None = None,
     ) -> None:
+        if model_name not in ESPACOS_BUSCA:
+            raise ValueError(f"Modelo nao suportado para AG: {model_name}")
+        self.model_name = model_name
         self.config = config
         self.settings = settings
         self.fitness_weights = fitness_weights or FitnessWeights()
         self._random = random.Random(config.random_seed)
+        self._espaco_busca = ESPACOS_BUSCA[model_name]
         self._fitness_cache: dict[tuple[tuple[str, Any], ...], tuple[ClassificationMetrics, float]] = {}
 
     def optimize(self, X_treino: pd.DataFrame, y_treino: pd.Series) -> GeneticSearchResult:
@@ -122,7 +150,7 @@ class HyperparameterGeneticOptimizer:
         return [Individual(genes=self._sample_genes()) for _ in range(self.config.population_size)]
 
     def _sample_genes(self) -> dict[str, Any]:
-        return {nome: self._random.choice(valores) for nome, valores in ESPACO_BUSCA.items()}
+        return {nome: self._random.choice(valores) for nome, valores in self._espaco_busca.items()}
 
     def _evaluate_population(
         self,
@@ -138,7 +166,7 @@ class HyperparameterGeneticOptimizer:
             if cached is not None:
                 individual.metrics, individual.fitness = cached
                 continue
-            modelo = criar_modelo_random_forest(individual.genes, self.settings.random_seed)
+            modelo = criar_modelo_otimizado_por_nome(self.model_name, individual.genes, self.settings.random_seed)
             metrics = avaliar_por_validacao_cruzada(modelo, X_treino, y_treino, self.settings)
             individual.metrics = metrics
             individual.fitness = calcular_fitness(metrics, self.fitness_weights)
@@ -172,14 +200,14 @@ class HyperparameterGeneticOptimizer:
         if self._random.random() > self.config.crossover_rate:
             return parent1.clone()
         child_genes: dict[str, Any] = {}
-        for nome in ESPACO_BUSCA:
+        for nome in self._espaco_busca:
             child_genes[nome] = parent1.genes[nome] if self._random.random() < 0.5 else parent2.genes[nome]
         return Individual(genes=child_genes)
 
     def _mutate(self, individual: Individual) -> Individual:
         mutated = individual.clone()
         changed = False
-        for nome, valores in ESPACO_BUSCA.items():
+        for nome, valores in self._espaco_busca.items():
             if self._random.random() < self.config.mutation_rate:
                 mutated.genes[nome] = self._random.choice(valores)
                 changed = True
