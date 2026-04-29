@@ -25,6 +25,11 @@ class AppIntegrationTests(unittest.TestCase):
             self.assertEqual(len(payload["experimentos_geneticos"]), 3)
             self.assertEqual(payload["baseline"]["modelo"], "LogisticRegression")
             self.assertTrue(all(item["modelo"] == "LogisticRegression" for item in payload["experimentos_geneticos"]))
+            assinaturas = {
+                tuple(sorted(item["parametros"].items()))
+                for item in payload["experimentos_geneticos"]
+            }
+            self.assertEqual(len(assinaturas), 3)
             self.assertTrue(output_path.exists())
 
     def test_treinamento_exporta_artefatos(self) -> None:

@@ -4,13 +4,13 @@
 
 Este projeto implementa uma solucao completa em Python para otimizar hiperparametros de modelos de Machine Learning usando Algoritmos Geneticos, com foco em apoio diagnostico para saude da mulher. O caso de uso escolhido foi classificacao de lesoes mamarias com base no dataset publico **Breast Cancer Wisconsin Diagnostic**, disponivel no `scikit-learn`.
 
-O sistema compara quatro modelos baseline e, em seguida, seleciona automaticamente o modelo mais performatico pela mesma funcao de fitness usada no AG. A familia vencedora passa a ser otimizada por algoritmo genetico, priorizando **recall/sensibilidade** para reduzir risco de falso negativo em casos malignos. Tambem inclui um modulo desacoplado de LLM para gerar explicacoes em linguagem natural com cuidado etico, sem dependencia obrigatoria de API paga.
+O sistema compara quatro modelos baseline e, em seguida, seleciona automaticamente a familia mais performatica por fitness no conjunto de validacao cruzada. A familia vencedora passa a ser otimizada por algoritmo genetico em tres experimentos com perfis distintos de busca, mantendo prioridade clinica em **recall/sensibilidade** para reduzir risco de falso negativo em casos malignos. Tambem inclui um modulo desacoplado de LLM para gerar explicacoes em linguagem natural com cuidado etico, sem dependencia obrigatoria de API paga.
 
 ## Objetivo do projeto
 
 - Treinar e comparar multiplos modelos baseline de classificacao.
 - Otimizar hiperparametros com algoritmo genetico.
-- Comparar modelos baseline vs modelo otimizado pela mesma funcao de fitness.
+- Comparar modelos baseline vs candidatos otimizados por algoritmo genetico.
 - Gerar explicacoes em linguagem natural para apoio ao profissional de saude.
 - Persistir respostas da LLM em JSONL para reuso futuro.
 - Documentar arquitetura, execucao, consideracoes eticas e testes.
@@ -218,7 +218,7 @@ O algoritmo genetico otimiza hiperparametros da familia de modelo selecionada au
 
 - representacao genetica: dicionario de hiperparametros;
 - populacao inicial: individuos aleatorios no espaco de busca;
-- fitness: combinacao ponderada de recall, especificidade e F1-score;
+- fitness: combinacao ponderada de recall, especificidade e F1-score, com pesos definidos por experimento;
 - selecao: torneio ou roleta;
 - crossover: uniforme gene a gene;
 - mutacao: substituicao aleatoria de genes conforme taxa de mutacao;
@@ -227,12 +227,18 @@ O algoritmo genetico otimiza hiperparametros da familia de modelo selecionada au
 
 ### Fitness
 
-A funcao objetivo prioriza recall:
+A funcao objetivo sempre combina as mesmas metricas:
 
-- `55%` recall
-- `25%` especificidade
-- `20%` F1-score
+- recall
+- especificidade
+- F1-score
 - penalizacao opcional por gap de equidade
+
+O que varia entre os experimentos sao os pesos dessa combinacao:
+
+1. `AG Experimento 1`: `70%` recall, `15%` especificidade, `15%` F1-score
+2. `AG Experimento 2`: `55%` recall, `25%` especificidade, `20%` F1-score
+3. `AG Experimento 3`: `40%` recall, `30%` especificidade, `30%` F1-score
 
 ## Experimentos obrigatorios
 
@@ -242,12 +248,17 @@ Foram implementados 3 experimentos com variacao de:
 - taxa de mutacao;
 - numero de geracoes;
 - estrategia de selecao.
+- taxa de crossover;
+- elitismo;
+- pesos da funcao de fitness.
 
 Configuracoes executadas:
 
-1. Populacao `6`, geracoes `3`, mutacao `0.10`, selecao `tournament`
-2. Populacao `8`, geracoes `4`, mutacao `0.15`, selecao `tournament`
-3. Populacao `10`, geracoes `5`, mutacao `0.20`, selecao `roulette`
+1. `AG Experimento 1`: populacao `6`, geracoes `3`, mutacao `0.10`, crossover `0.85`, elitismo `1`, torneio `2`, selecao `tournament`
+2. `AG Experimento 2`: populacao `8`, geracoes `4`, mutacao `0.20`, crossover `0.90`, elitismo `2`, torneio `3`, selecao `tournament`
+3. `AG Experimento 3`: populacao `12`, geracoes `6`, mutacao `0.30`, crossover `0.95`, elitismo `2`, torneio `4`, selecao `roulette`
+
+Para aumentar a diversidade entre os cenarios, os experimentos posteriores nao aceitam repetir a melhor combinacao de hiperparametros ja encontrada por um experimento anterior. Assim, os tres resultados apresentados representam candidatos distintos dentro da mesma familia de modelo.
 
 ## Modelos baseline comparados
 
@@ -314,7 +325,8 @@ Cobertura incluida para:
 - O dataset foi escolhido por ser publico, reprodutivel e aderente ao dominio de saude da mulher.
 - O modelo de referencia do AG nao e fixo: ele e escolhido automaticamente pelo melhor fitness entre os baselines.
 - Os hiperparametros otimizados dependem da familia vencedora no baseline, o que torna a busca evolutiva coerente com o melhor candidato encontrado.
-- A fitness prioriza recall porque falso negativo em contexto oncologico e clinicamente mais sensivel.
+- Os experimentos geneticos usam a mesma formula de fitness, mas com pesos diferentes por cenario para comparar estrategias mais orientadas a recall ou mais equilibradas.
+- A prioridade de recall continua intencional, porque falso negativo em contexto oncologico e clinicamente mais sensivel.
 - A camada de LLM foi desacoplada para permitir mock local, integracao HTTP e futura evolucao para a Fase 3.
 - A arquitetura modular prepara a base para execucao assincrona, workers dedicados, API separada e servicos desacoplados na Fase 3.
 

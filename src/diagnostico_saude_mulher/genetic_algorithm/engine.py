@@ -105,6 +105,7 @@ class HyperparameterGeneticOptimizer:
         config: GeneticConfig,
         settings: AppSettings,
         fitness_weights: FitnessWeights | None = None,
+        forbidden_signatures: set[tuple[tuple[str, Any], ...]] | None = None,
     ) -> None:
         if model_name not in ESPACOS_BUSCA:
             raise ValueError(f"Modelo nao suportado para AG: {model_name}")
@@ -115,6 +116,7 @@ class HyperparameterGeneticOptimizer:
         self._random = random.Random(config.random_seed)
         self._espaco_busca = ESPACOS_BUSCA[model_name]
         self._fitness_cache: dict[tuple[tuple[str, Any], ...], tuple[ClassificationMetrics, float]] = {}
+        self._forbidden_signatures = forbidden_signatures or set()
 
     def optimize(self, X_treino: pd.DataFrame, y_treino: pd.Series) -> GeneticSearchResult:
         """Executa o AG e retorna o melhor conjunto de hiperparâmetros."""
@@ -147,10 +149,35 @@ class HyperparameterGeneticOptimizer:
         )
 
     def _initialize_population(self) -> list[Individual]:
-        return [Individual(genes=self._sample_genes()) for _ in range(self.config.population_size)]
+        population: list[Individual] = []
+        used_signatures: set[tuple[tuple[str, Any], ...]] = set()
+        search_space_size = self._estimate_search_space_size()
+        target_unique = min(self.config.population_size, search_space_size)
+
+        while len(population) < target_unique:
+            genes = self._sample_genes()
+            signature = self._build_genes_signature(genes)
+            if signature in used_signatures:
+                continue
+            used_signatures.add(signature)
+            population.append(Individual(genes=genes))
+
+        while len(population) < self.config.population_size:
+            population.append(Individual(genes=self._sample_genes()))
+
+        return population
 
     def _sample_genes(self) -> dict[str, Any]:
         return {nome: self._random.choice(valores) for nome, valores in self._espaco_busca.items()}
+
+    def _estimate_search_space_size(self) -> int:
+        size = 1
+        for values in self._espaco_busca.values():
+            size *= len(values)
+        return size
+
+    def _build_genes_signature(self, genes: dict[str, Any]) -> tuple[tuple[str, Any], ...]:
+        return tuple(sorted(genes.items()))
 
     def _evaluate_population(
         self,
@@ -161,7 +188,11 @@ class HyperparameterGeneticOptimizer:
         for individual in population:
             if individual.metrics is not None:
                 continue
-            cache_key = tuple(sorted(individual.genes.items()))
+            cache_key = self._build_genes_signature(individual.genes)
+            if cache_key in self._forbidden_signatures:
+                individual.metrics = self._build_zero_metrics()
+                individual.fitness = -1.0
+                continue
             cached = self._fitness_cache.get(cache_key)
             if cached is not None:
                 individual.metrics, individual.fitness = cached
@@ -209,7 +240,11 @@ class HyperparameterGeneticOptimizer:
         changed = False
         for nome, valores in self._espaco_busca.items():
             if self._random.random() < self.config.mutation_rate:
-                mutated.genes[nome] = self._random.choice(valores)
+                current_value = mutated.genes[nome]
+                candidate_values = [valor for valor in valores if valor != current_value]
+                if not candidate_values:
+                    continue
+                mutated.genes[nome] = self._random.choice(candidate_values)
                 changed = True
         if changed:
             mutated.metrics = None
@@ -228,4 +263,15 @@ class HyperparameterGeneticOptimizer:
             best_recall=best.metrics.recall,
             best_specificity=best.metrics.specificity,
             best_f1_score=best.metrics.f1_score,
+        )
+
+    def _build_zero_metrics(self) -> ClassificationMetrics:
+        return ClassificationMetrics(
+            recall=0.0,
+            specificity=0.0,
+            f1_score=0.0,
+            accuracy=0.0,
+            roc_auc=0.0,
+            precision=0.0,
+            fairness_gap=None,
         )

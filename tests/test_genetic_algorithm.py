@@ -21,6 +21,8 @@ class GeneticAlgorithmTests(unittest.TestCase):
         for individual in population:
             for nome, valor in individual.genes.items():
                 self.assertIn(valor, self.espaco_busca[nome])
+        signatures = {tuple(sorted(individual.genes.items())) for individual in population}
+        self.assertEqual(len(signatures), len(population))
 
     def test_crossover_gera_filho_valido(self) -> None:
         parent1 = Individual(genes={nome: valores[0] for nome, valores in self.espaco_busca.items()})
@@ -34,6 +36,7 @@ class GeneticAlgorithmTests(unittest.TestCase):
         mutated = self.optimizer._mutate(original)
         for nome, valor in mutated.genes.items():
             self.assertIn(valor, self.espaco_busca[nome])
+        self.assertNotEqual(mutated.genes, original.genes)
 
 
 if __name__ == "__main__":

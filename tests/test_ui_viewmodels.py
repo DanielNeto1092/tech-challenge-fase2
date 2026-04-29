@@ -31,10 +31,10 @@ class UIViewModelTests(unittest.TestCase):
     def test_experiment_results_to_dataframe(self) -> None:
         dataframe = experiment_results_to_dataframe([_build_experiment()])
         self.assertEqual(len(dataframe), 1)
-        self.assertIn("experimento", dataframe.columns)
-        self.assertIn("parametros", dataframe.columns)
-        self.assertIn("fitness_cv", dataframe.columns)
-        self.assertIn("RandomForestClassifier", dataframe.iloc[0]["experimento"])
+        self.assertIn("Experimento", dataframe.columns)
+        self.assertIn("Parâmetros", dataframe.columns)
+        self.assertIn("Fitness CV", dataframe.columns)
+        self.assertIn("Random Forest", dataframe.iloc[0]["Experimento"])
 
     def test_llm_history_to_dataframe(self) -> None:
         history = [

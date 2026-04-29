@@ -53,20 +53,68 @@ class PipelineExecutionResult:
         }
 
 
-def build_genetic_configs() -> list[GeneticConfig]:
+@dataclass(frozen=True)
+class GeneticExperimentSpec:
+    """Define um experimento genético com objetivo próprio."""
+
+    name: str
+    config: GeneticConfig
+    fitness_weights: FitnessWeights
+
+
+def build_genetic_configs() -> list[GeneticExperimentSpec]:
     """Retorna os experimentos padrão do algoritmo genético."""
 
     return [
-        GeneticConfig(population_size=6, generations=3, mutation_rate=0.10, selection_strategy="tournament", random_seed=42),
-        GeneticConfig(population_size=8, generations=4, mutation_rate=0.15, selection_strategy="tournament", random_seed=84),
-        GeneticConfig(population_size=10, generations=5, mutation_rate=0.20, selection_strategy="roulette", random_seed=126),
+        GeneticExperimentSpec(
+            name="ag_experimento_1",
+            config=GeneticConfig(
+                population_size=6,
+                generations=3,
+                mutation_rate=0.10,
+                crossover_rate=0.85,
+                elite_size=1,
+                tournament_size=2,
+                selection_strategy="tournament",
+                random_seed=42,
+            ),
+            fitness_weights=FitnessWeights(recall=0.70, specificity=0.15, f1_score=0.15),
+        ),
+        GeneticExperimentSpec(
+            name="ag_experimento_2",
+            config=GeneticConfig(
+                population_size=8,
+                generations=4,
+                mutation_rate=0.20,
+                crossover_rate=0.90,
+                elite_size=2,
+                tournament_size=3,
+                selection_strategy="tournament",
+                random_seed=84,
+            ),
+            fitness_weights=FitnessWeights(recall=0.55, specificity=0.25, f1_score=0.20),
+        ),
+        GeneticExperimentSpec(
+            name="ag_experimento_3",
+            config=GeneticConfig(
+                population_size=12,
+                generations=6,
+                mutation_rate=0.30,
+                crossover_rate=0.95,
+                elite_size=2,
+                tournament_size=4,
+                selection_strategy="roulette",
+                random_seed=126,
+            ),
+            fitness_weights=FitnessWeights(recall=0.40, specificity=0.30, f1_score=0.30),
+        ),
     ]
 
 
 def run_experiments(
     settings: AppSettings,
     dataset: DatasetBundle,
-    configs: list[GeneticConfig] | None = None,
+    configs: list[GeneticExperimentSpec] | None = None,
 ) -> tuple[list[ExperimentResult], ExperimentResult, list[ExperimentResult]]:
     """Executa baseline e experimentos genéticos."""
 
@@ -100,10 +148,23 @@ def run_experiments(
 
     experimentos_otimizados: list[ExperimentResult] = []
     experiment_configs = build_genetic_configs() if configs is None else configs
-    for indice, config in enumerate(experiment_configs, start=1):
-        LOGGER.info("Executando experimento genetico %s com config=%s", indice, config)
-        optimizer = HyperparameterGeneticOptimizer(model_name=baseline.modelo, config=config, settings=settings)
+    best_signatures: set[tuple[tuple[str, object], ...]] = set()
+    for spec in experiment_configs:
+        LOGGER.info(
+            "Executando experimento genetico %s com config=%s e pesos=%s",
+            spec.name,
+            spec.config,
+            spec.fitness_weights,
+        )
+        optimizer = HyperparameterGeneticOptimizer(
+            model_name=baseline.modelo,
+            config=spec.config,
+            settings=settings,
+            fitness_weights=spec.fitness_weights,
+            forbidden_signatures=best_signatures,
+        )
         result = optimizer.optimize(dataset.X_treino, dataset.y_treino)
+        best_signatures.add(tuple(sorted(result.best_params.items())))
         modelo_otimizado = criar_modelo_otimizado_por_nome(baseline.modelo, result.best_params, settings.random_seed)
         bundle = treinar_e_avaliar_modelo(
             modelo_otimizado,
@@ -115,7 +176,7 @@ def run_experiments(
         )
         experimentos_otimizados.append(
             ExperimentResult(
-                nome_experimento=f"ag_experimento_{indice}",
+                nome_experimento=spec.name,
                 modelo=baseline.modelo,
                 algoritmo="genetico",
                 parametros=result.best_params,
